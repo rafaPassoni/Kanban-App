@@ -9,7 +9,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import * as Icon from "react-bootstrap-icons";
+import { Kanban, FolderOpen, X, Menu, LogOut } from "lucide-react";
+import type { LucideProps } from "lucide-react";
 
 import logo from "../../../public/logo.png";
 import AuthService from "@/services/auth";
@@ -20,7 +21,7 @@ import type { UserPermissions } from "@/lib/permissionUtils";
 type NavItem = {
   label: string;
   href: string;
-  icon: React.ComponentType<Icon.IconProps>;
+  icon: React.ComponentType<LucideProps>;
 };
 
 function safeParseJSON<T>(raw: string | null): T | null {
@@ -41,8 +42,8 @@ export default function NavHoverIcons() {
   const directLinks = useMemo(
     () =>
       [
-        { label: "Kanban", href: "/kanban", icon: Icon.KanbanFill },
-        { label: "Projetos", href: "/projetos", icon: Icon.FolderFill },
+        { label: "Kanban", href: "/kanban", icon: Kanban },
+        { label: "Projetos", href: "/projetos", icon: FolderOpen },
       ] as NavItem[],
     [],
   );
@@ -115,7 +116,7 @@ export default function NavHoverIcons() {
     <>
       <header className="relative z-40 flex w-full justify-center px-2 pt-4 pb-4">
         <nav className="flex w-full max-w-8xl items-center justify-between rounded-2xl border border-slate-800/70 bg-slate-900/90 px-3 py-3 shadow-lg shadow-slate-950/50 backdrop-blur-xl sm:px-6 sm:py-4">
-          {/* Logotipo e titulo */}
+          {/* Logotipo e título */}
           <Link href="/kanban" className="flex items-center gap-3 sm:gap-4">
             <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-slate-800/90 ring-1 ring-slate-700/90 sm:h-11 sm:w-11">
               <Image
@@ -163,7 +164,7 @@ export default function NavHoverIcons() {
                             : "bg-slate-800 text-slate-300",
                         ].join(" ")}
                       >
-                        <IconComponent />
+                        <IconComponent className="h-4 w-4" />
                       </span>
 
                       <span className={[
@@ -187,9 +188,9 @@ export default function NavHoverIcons() {
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
-                <Icon.XLg className="text-lg" />
+                <X className="h-5 w-5" />
               ) : (
-                <Icon.List className="text-xl" />
+                <Menu className="h-5 w-5" />
               )}
             </button>
 
@@ -200,7 +201,7 @@ export default function NavHoverIcons() {
               onClick={AuthService.logout}
               className="gap-2 rounded-full bg-rose-600 px-3 py-2 text-xs font-medium shadow-md shadow-rose-900/40 hover:bg-rose-500 cursor-pointer sm:px-4"
             >
-              <Icon.BoxArrowRight className="text-sm" />
+              <LogOut className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Sair</span>
             </Button>
           </div>
@@ -243,11 +244,11 @@ export default function NavHoverIcons() {
             className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200 cursor-pointer"
             aria-label="Fechar menu"
           >
-            <Icon.XLg className="text-lg" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Conteudo do drawer - scrollavel */}
+        {/* Conteúdo do drawer - scrollável */}
         <div className="flex-1 overflow-y-auto px-3 py-3">
           {/* Links diretos mobile */}
           {visibleDirectLinks.map(
@@ -274,7 +275,7 @@ export default function NavHoverIcons() {
                         : "bg-slate-800 text-slate-300",
                     ].join(" ")}
                   >
-                    <IconComponent />
+                    <IconComponent className="h-4 w-4" />
                   </span>
                   <span>{label}</span>
                 </Link>
@@ -291,7 +292,7 @@ export default function NavHoverIcons() {
             onClick={AuthService.logout}
             className="w-full gap-2 rounded-xl bg-rose-600 px-4 py-3 text-sm font-medium shadow-md shadow-rose-900/40 hover:bg-rose-500 cursor-pointer"
           >
-            <Icon.BoxArrowRight className="text-base" /> Sair
+            <LogOut className="h-4 w-4" /> Sair
           </Button>
         </div>
       </aside>

@@ -3,10 +3,12 @@
 Inclui CRUD de setores e um endpoint de setores acessiveis por usuario.
 """
 
+from django.db.models import Count, Q
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from authentication.permission_checkers import EnhancedDjangoModelPermissions
 from .models import Department, DepartmentAccess
 from .serializers import DepartmentSerializer
 
@@ -14,9 +16,15 @@ from .serializers import DepartmentSerializer
 class DepartmentViewSet(viewsets.ModelViewSet):
     """CRUD de setores com filtro simples por ativo/inativo."""
 
-    queryset = Department.objects.all()
+    queryset = (
+        Department.objects
+        .prefetch_related('collaborators', 'subdepartments')
+        .annotate(_active_collaborators_count=Count(
+            'collaborators', filter=Q(collaborators__is_active=True)
+        ))
+    )
     serializer_class = DepartmentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
 
     def get_queryset(self):
         """Aplica filtro opcional `?is_active=true|false` na listagem."""

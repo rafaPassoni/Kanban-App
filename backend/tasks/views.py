@@ -5,14 +5,15 @@ Centraliza listagens com filtros por projeto/status/responsavel/departamento.
 
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from authentication.permission_checkers import EnhancedDjangoModelPermissions
 from .models import Subtask, Task
-from .serializers import SubtaskSerializer, TaskSerializer
+from .serializers import PublicTaskSerializer, SubtaskSerializer, TaskSerializer
 
 class TaskViewSet(viewsets.ModelViewSet):
-    """CRUD de projetos (cards do kanban) com otimizacoes de queryset e filtros."""
-    queryset = Task.objects.select_related('project', 'responsavel').prefetch_related('assigned_to', 'department').order_by('order', '-id')
+    """CRUD de tarefas (cards do kanban) com otimizacoes de queryset e filtros."""
+    queryset = Task.objects.select_related('project', 'responsavel').prefetch_related('assigned_to', 'department', 'subtasks').order_by('order', '-id')
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
 
     def get_queryset(self):
         """Aplica filtros opcionais para reduzir payload e consultas no cliente."""
@@ -39,9 +40,9 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
 class PublicTaskViewSet(viewsets.ReadOnlyModelViewSet):
-    """Versao publica (somente leitura) dos projetos."""
-    queryset = Task.objects.select_related('project', 'responsavel').prefetch_related('assigned_to', 'department').order_by('order', '-id')
-    serializer_class = TaskSerializer
+    """Versao publica (somente leitura) com campos restritos."""
+    queryset = Task.objects.select_related('project', 'responsavel').order_by('order', '-id')
+    serializer_class = PublicTaskSerializer
     permission_classes = [AllowAny]
 
 
@@ -49,4 +50,4 @@ class SubtaskViewSet(viewsets.ModelViewSet):
     """CRUD de subtarefas ordenadas por `order` e data de criacao."""
     queryset = Subtask.objects.select_related("task").order_by("order", "created_at")
     serializer_class = SubtaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]

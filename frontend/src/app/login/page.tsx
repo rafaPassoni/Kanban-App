@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import * as Icon from "react-bootstrap-icons";
+import { CircleUser, User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import AuthService from "@/services/auth";
 import { API_PERMISSIONS, API_USER_PERMISSIONS, API_USER_FULL_ACCESS, API_TOKEN } from "@/constants/api";
@@ -164,7 +164,7 @@ function LoginScreenContent() {
     return (
         <div className="relative min-h-screen overflow-hidden">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60rem_60rem_at_20%_10%,rgba(59,130,246,0.22),transparent_55%),radial-gradient(60rem_60rem_at_90%_90%,rgba(14,165,233,0.16),transparent_50%)]" />
-            <div className="pointer-events-none absolute inset-0 opacity-30 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:64px_64px]" />
+            <div className="pointer-events-none absolute inset-0 opacity-30 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-size-[64px_64px]" />
 
             <ToastContainer />
 
@@ -188,7 +188,7 @@ function LoginScreenContent() {
                         <div className="border-b border-white/10 p-6 sm:p-8">
                             <div className="flex items-center gap-3">
                                 <div className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-500/10 text-blue-200 ring-1 ring-blue-500/20">
-                                    <Icon.PersonCircle className="h-6 w-6" />
+                                    <CircleUser className="h-6 w-6" />
                                 </div>
                                 <div className="min-w-0">
                                     <h2 className="truncate text-xl font-semibold text-slate-50">Bem-vindo</h2>
@@ -206,7 +206,7 @@ function LoginScreenContent() {
 
                                     <div className="relative">
                                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <Icon.Person size={18} className="text-slate-400" />
+                                            <User className="h-4.5 w-4.5 text-slate-400" />
                                         </div>
 
                                         <input
@@ -241,7 +241,7 @@ function LoginScreenContent() {
 
                                     <div className="relative">
                                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <Icon.Lock size={18} className="text-slate-400" />
+                                            <Lock className="h-4.5 w-4.5 text-slate-400" />
                                         </div>
 
                                         <input
@@ -267,7 +267,7 @@ function LoginScreenContent() {
                                             aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                                             disabled={loading}
                                         >
-                                            {showPassword ? <Icon.EyeSlash size={18} /> : <Icon.Eye size={18} />}
+                                            {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
                                         </button>
                                     </div>
 
@@ -291,7 +291,7 @@ function LoginScreenContent() {
                                     ) : (
                                         <>
                                             Entrar
-                                            <Icon.ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                                            <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
                                         </>
                                     )}
                                 </button>
@@ -309,7 +309,7 @@ function LoginScreenContent() {
 }
 
 // ====================
-// Pagina
+// Página
 // ====================
 export default function LoginScreen() {
     return (

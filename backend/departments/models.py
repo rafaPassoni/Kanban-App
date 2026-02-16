@@ -98,4 +98,4 @@ class DepartmentAccess(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.user_id} -> {self.department_id}"
+        return f"{self.user} -> {self.department}"

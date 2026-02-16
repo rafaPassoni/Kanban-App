@@ -9,11 +9,7 @@ Este arquivo:
 import os
 from datetime import timedelta
 from pathlib import Path
-from dotenv import load_dotenv
 from decouple import config, Csv
-
-# Carrega variaveis do arquivo `.env` (quando presente).
-load_dotenv()
 
 # Constroi caminhos dentro do projeto como: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,7 +124,7 @@ else:
 # Regras de tokens JWT (duracao e formato do header).
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=4),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
@@ -144,6 +140,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 200,
 }
 
 # Configuracoes de seguranca para producao

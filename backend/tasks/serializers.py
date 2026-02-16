@@ -13,10 +13,14 @@ class SubtaskSerializer(serializers.ModelSerializer):
     class Meta:
         """Mantem o serializer simples, espelhando o modelo."""
         model = Subtask
-        fields = "__all__"
+        fields = (
+            'id', 'task', 'title', 'is_done', 'order',
+            'created_at', 'updated_at',
+        )
+        read_only_fields = ('id', 'created_at', 'updated_at')
 
 class TaskSerializer(serializers.ModelSerializer):
-    """Serializa projetos (cards do kanban) com nomes derivados e regras de status/conclusao."""
+    """Serializa tarefas (cards do kanban) com nomes derivados e regras de status/conclusao."""
     project_name = serializers.CharField(source='project.name', read_only=True, allow_null=True, default=None)
     responsavel_name = serializers.CharField(source='responsavel.name', read_only=True, allow_null=True, default=None)
     assigned_to_names = serializers.SerializerMethodField()
@@ -24,9 +28,17 @@ class TaskSerializer(serializers.ModelSerializer):
     subtasks = SubtaskSerializer(many=True, read_only=True)
 
     class Meta:
-        """Inclui todos os campos do modelo e os derivados acima."""
+        """Inclui campos do modelo e os derivados acima."""
         model = Task
-        fields = '__all__'
+        fields = (
+            'id', 'title', 'description', 'solution', 'status', 'priority',
+            'project', 'responsavel', 'assigned_to', 'department',
+            'order', 'start_date', 'deadline', 'completed_at',
+            'created_at', 'updated_at',
+            'project_name', 'responsavel_name', 'assigned_to_names',
+            'department_names', 'subtasks',
+        )
+        read_only_fields = ('id', 'created_at', 'updated_at')
 
     def get_assigned_to_names(self, obj):
         """Retorna nomes dos responsaveis para evitar logica no frontend."""
@@ -53,3 +65,17 @@ class TaskSerializer(serializers.ModelSerializer):
         elif instance.status == "DONE" and next_status != "DONE":
             validated_data["completed_at"] = None
         return super().update(instance, validated_data)
+
+
+class PublicTaskSerializer(serializers.ModelSerializer):
+    """Versao publica com campos restritos — sem dados sensiveis."""
+    project_name = serializers.CharField(source='project.name', read_only=True, allow_null=True, default=None)
+    responsavel_name = serializers.CharField(source='responsavel.name', read_only=True, allow_null=True, default=None)
+
+    class Meta:
+        model = Task
+        fields = (
+            'id', 'title', 'status', 'priority', 'order',
+            'deadline', 'completed_at',
+            'project_name', 'responsavel_name',
+        )

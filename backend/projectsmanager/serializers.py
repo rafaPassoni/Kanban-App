@@ -14,9 +14,17 @@ class ProjectSerializer(serializers.ModelSerializer):
     user_can_edit = serializers.SerializerMethodField()
 
     class Meta:
-        """Usa todos os campos do modelo e acrescenta os derivados."""
+        """Lista campos explicitamente para evitar exposicao acidental."""
         model = Project
-        fields = '__all__'
+        fields = (
+            'id', 'name', 'description', 'repo_url', 'admin_url', 'ports',
+            'status', 'is_online', 'credential_user', 'credential_password',
+            'readme', 'doc_changed_at',
+            'responsible_collaborators', 'used_by_departments',
+            'created_at', 'updated_at',
+            'responsible_collaborators_names', 'used_by_departments_names',
+            'user_can_view', 'user_can_edit',
+        )
 
     def get_responsible_collaborators_names(self, obj):
         """Retorna apenas os nomes para facilitar renderizacao no cliente."""
@@ -28,40 +36,42 @@ class ProjectSerializer(serializers.ModelSerializer):
         # Exibe nomes legiveis para facilitar filtros e buscas no frontend.
         return [d.name for d in obj.used_by_departments.all()]
 
-    def get_user_can_view(self, obj):
-        """Indica se o usuário atual pode visualizar este projeto."""
+    def _get_user_access(self, obj):
+        """Retorna o UserProjectAccess do usuario atual (usando prefetch cache)."""
         request = self.context.get('request')
         if not request or not request.user.is_authenticated:
-            return False
-
+            return None, None
         user = request.user
+        if user.is_superuser or user.is_staff:
+            return user, None
+        # Usa o prefetch cache em vez de query individual por projeto
+        for access in obj.user_accesses.all():
+            if access.user_id == user.id:
+                return user, access
+        return user, None
 
+    def get_user_can_view(self, obj):
+        """Indica se o usuario atual pode visualizar este projeto."""
+        user, access = self._get_user_access(obj)
+        if user is None:
+            return False
         if user.is_superuser or user.is_staff:
             return True
-
-        try:
-            access = UserProjectAccess.objects.get(user=user, project=obj)
+        if access is not None:
             return access.can_view
-        except UserProjectAccess.DoesNotExist:
-            return user.has_perm('projectsmanager.view_project') or \
-                   user.has_perm('projectsmanager.view_accesscenter')
+        return user.has_perm('projectsmanager.view_project') or \
+               user.has_perm('projectsmanager.view_accesscenter')
 
     def get_user_can_edit(self, obj):
-        """Indica se o usuário atual pode editar este projeto."""
-        request = self.context.get('request')
-        if not request or not request.user.is_authenticated:
+        """Indica se o usuario atual pode editar este projeto."""
+        user, access = self._get_user_access(obj)
+        if user is None:
             return False
-
-        user = request.user
-
         if user.is_superuser or user.is_staff:
             return True
-
-        try:
-            access = UserProjectAccess.objects.get(user=user, project=obj)
+        if access is not None:
             return access.can_edit
-        except UserProjectAccess.DoesNotExist:
-            return user.has_perm('projectsmanager.change_project')
+        return user.has_perm('projectsmanager.change_project')
 
     def to_internal_value(self, data):
         """Normaliza `is_online` quando chega como string em formularios."""

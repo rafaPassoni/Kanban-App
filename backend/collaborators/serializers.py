@@ -12,7 +12,7 @@ class CollaboratorSerializer(serializers.ModelSerializer):
     department_name = serializers.CharField(source='department.name', read_only=True)
     manager_name = serializers.CharField(source='manager.name', read_only=True, allow_null=True)
     managers_names = serializers.SerializerMethodField()
-    subordinates_count = serializers.SerializerMethodField()
+    subordinates_count = serializers.IntegerField(source='_subordinates_count', read_only=True, default=0)
 
     class Meta:
         """Inclui campos base e derivados, protegendo auditoria como read-only."""
@@ -24,10 +24,6 @@ class CollaboratorSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
-
-    def get_subordinates_count(self, obj):
-        """Retorna quantos subordinados diretos este colaborador possui."""
-        return obj.subordinates.count()
 
     def get_managers_names(self, obj):
         """Retorna apenas os nomes dos gestores para exibicao simples."""

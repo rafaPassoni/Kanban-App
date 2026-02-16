@@ -23,8 +23,8 @@ class DepartmentSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at', 'updated_at']
 
     def get_collaborators_count(self, obj):
-        """Conta apenas colaboradores ativos relacionados ao setor."""
-        return obj.collaborators.filter(is_active=True).count()
+        """Conta apenas colaboradores ativos relacionados ao setor (via anotacao do ViewSet)."""
+        return getattr(obj, '_active_collaborators_count', 0)
 
     def get_subdepartments(self, obj):
         """Retorna subsetores apenas para setores principais."""

@@ -535,6 +535,10 @@
         width: 100%;
     }
 
+    .statsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .boardGrid {
         grid-template-columns: 1fr;
     }
@@ -542,5 +546,56 @@
     .column {
         height: auto;
         min-height: 400px;
+    }
+}
+
+@media (max-width: 640px) {
+    .headerTitle {
+        font-size: 24px;
+    }
+
+    .columnTitle {
+        font-size: 16px;
+    }
+
+    .taskTitle {
+        font-size: 14px;
+    }
+
+    .statValue {
+        font-size: 16px;
+    }
+
+    .emptyColumn {
+        font-size: 14px;
+    }
+
+    .deadlineRow {
+        font-size: 13px;
+    }
+
+    .descriptionText {
+        font-size: 12px;
+    }
+
+    .assignedName {
+        font-size: 12px;
+    }
+
+    .metaRow {
+        font-size: 12px;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .boardGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .column {
+        height: auto;
+        min-height: 300px;
     }
 }

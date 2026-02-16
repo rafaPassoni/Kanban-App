@@ -40,17 +40,17 @@ const GROUP_ROUTES: Record<string, string[]> = {
 
 
 /**
- * Obtem as rotas permitidas para um usuario baseado em seus grupos
- * @param userPermissions - Dados de permissoes do usuario
+ * Obtém as rotas permitidas para um usuário baseado em seus grupos
+ * @param userPermissions - Dados de permissões do usuário
  * @returns Array de rotas permitidas
  */
 export function getAllowedRoutes(userPermissions: UserPermissions): string[] {
-    // Se nao houver dados, retorna array vazio
+    // Se não houver dados, retorna array vazio
     if (!userPermissions.user) {
         return [];
     }
 
-    // Superusers e Staff tem acesso a todas as rotas
+    // Superusers e Staff têm acesso a todas as rotas
     if (userPermissions.user.is_superuser || userPermissions.user.is_staff) {
         return ["/", "/kanban", "/projetos"];
     }
@@ -68,7 +68,7 @@ export function getAllowedRoutes(userPermissions: UserPermissions): string[] {
         }
     }
 
-    // Coleta todas as rotas dos grupos do usuario
+    // Coleta todas as rotas dos grupos do usuário
     if (userPermissions.user.groups) {
         for (const group of userPermissions.user.groups) {
             const groupRoutes = GROUP_ROUTES[group];
@@ -82,10 +82,10 @@ export function getAllowedRoutes(userPermissions: UserPermissions): string[] {
 }
 
 /**
- * Obtem a primeira rota permitida para um usuario
- * Util para redirecionamento apos login
- * @param userPermissions - Dados de permissoes do usuario
- * @returns A primeira rota permitida, ou null se nao houver nenhuma
+ * Obtém a primeira rota permitida para um usuário
+ * Útil para redirecionamento após login
+ * @param userPermissions - Dados de permissões do usuário
+ * @returns A primeira rota permitida, ou null se não houver nenhuma
  */
 export function getFirstAllowedRoute(userPermissions: UserPermissions): string | null {
     // Ordem de prioridade das rotas
@@ -93,7 +93,7 @@ export function getFirstAllowedRoute(userPermissions: UserPermissions): string |
 
     const allowedRoutes = getAllowedRoutes(userPermissions);
 
-    // Retorna a primeira rota na ordem de prioridade que esta permitida
+    // Retorna a primeira rota na ordem de prioridade que está permitida
     for (const route of routeOrder) {
         if (allowedRoutes.includes(route)) {
             return route;

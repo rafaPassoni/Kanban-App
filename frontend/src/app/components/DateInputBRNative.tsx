@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 
 // ====================
-// Funcoes auxiliares de data (padrao BR)
+// Funções auxiliares de data (padrão BR)
 // ====================
 export function isoToBR(iso?: string) {
     if (!iso) return "";
@@ -90,9 +90,10 @@ export type DateInputBRNativeProps = {
     valueISO: string;
     onChangeISO: (nextISO: string) => void;
     required?: boolean;
+    openUp?: boolean;
 };
 
-export default function DateInputBRNative({ label, valueISO, onChangeISO, required }: DateInputBRNativeProps) {
+export default function DateInputBRNative({ label, valueISO, onChangeISO, required, openUp }: DateInputBRNativeProps) {
     const [text, setText] = useState(() => isoToBR(valueISO));
     const [inputError, setInputError] = useState<string>("");
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -256,7 +257,7 @@ export default function DateInputBRNative({ label, valueISO, onChangeISO, requir
 
                 {isCalendarOpen && (
                     <div
-                        className="absolute bottom-full right-0 mb-2 w-[280px] rounded-xl border border-slate-700/80 bg-slate-900/95 shadow-2xl shadow-black/40 p-3"
+                        className={`absolute z-50 ${openUp ? "bottom-full mb-2" : "top-full mt-2"} left-0 sm:right-0 sm:left-auto w-65 sm:w-70 rounded-xl border border-slate-700/80 bg-slate-900/95 shadow-2xl shadow-black/40 p-3`}
                         role="dialog"
                         aria-label="Calendário"
                     >

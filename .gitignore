@@ -42,3 +42,9 @@ Thumbs.db
 # Django
 backend/staticfiles/
 backend/mediafiles/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Logs
+*.log

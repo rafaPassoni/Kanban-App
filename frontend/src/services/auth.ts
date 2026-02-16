@@ -1,47 +1,10 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { API_TOKEN, API_TOKEN_REFRESH, API_LOGOUT } from "@/constants/api";
-
-type JwtPayload = {
-  exp?: number; // exp em segundos (padrão JWT)
-};
+import { getJwtExpiryMs } from "@/lib/jwt";
 
 let interceptorsInitialized = false;
 let forceLogoutTriggered = false;
-
-/**
- * Decodifica o payload do JWT (parte do meio do token).
- * Não valida assinatura — serve apenas para ler o "exp".
- */
-function decodeJwtPayload(token: string): JwtPayload | null {
-  try {
-    const parts = token.split(".");
-    if (parts.length < 2) return null;
-
-    const payloadBase64Url = parts[1];
-    if (!payloadBase64Url) return null;
-
-    // Base64URL -> Base64
-    const base64 = payloadBase64Url.replace(/-/g, "+").replace(/_/g, "/");
-
-    // Ajusta padding para múltiplo de 4
-    const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-
-    const payloadJson = atob(padded);
-    return JSON.parse(payloadJson) as JwtPayload;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Retorna o exp do JWT em milissegundos (Date.now() compatível).
- */
-function getJwtExpiryMs(token: string): number | null {
-  const payload = decodeJwtPayload(token);
-  if (!payload?.exp) return null;
-  return payload.exp * 1000;
-}
 
 /**
  * Identifica endpoints de autenticação para evitar:

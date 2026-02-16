@@ -3,8 +3,10 @@
 Fornece CRUD de colaboradores e dados persistidos do organograma.
 """
 
+from django.db.models import Count
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from authentication.permission_checkers import EnhancedDjangoModelPermissions
 from .models import Collaborator, OrgchartEdge, OrgchartNote
 from .serializers import CollaboratorSerializer, OrgchartEdgeSerializer, OrgchartNoteSerializer
 
@@ -12,9 +14,14 @@ from .serializers import CollaboratorSerializer, OrgchartEdgeSerializer, Orgchar
 class CollaboratorViewSet(viewsets.ModelViewSet):
     """CRUD de colaboradores com otimizacoes e filtro por ativo/inativo."""
 
-    queryset = Collaborator.objects.select_related('department', 'manager').prefetch_related('subordinates', 'managers')
+    queryset = (
+        Collaborator.objects
+        .select_related('department', 'manager')
+        .prefetch_related('subordinates', 'managers')
+        .annotate(_subordinates_count=Count('subordinates'))
+    )
     serializer_class = CollaboratorSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
 
     def get_queryset(self):
         """Aplica filtro opcional `?is_active=true|false` na listagem."""
@@ -32,7 +39,7 @@ class OrgchartEdgeViewSet(viewsets.ModelViewSet):
     # Evita consultas extras ao serializar nomes/relacoes em lote.
     queryset = OrgchartEdge.objects.select_related('source', 'target')
     serializer_class = OrgchartEdgeSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
 
 
 class OrgchartNoteViewSet(viewsets.ModelViewSet):
@@ -40,7 +47,7 @@ class OrgchartNoteViewSet(viewsets.ModelViewSet):
 
     queryset = OrgchartNote.objects.select_related('department')
     serializer_class = OrgchartNoteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
 
     def get_queryset(self):
         """Filtra por `department` quando informado para reduzir payload."""

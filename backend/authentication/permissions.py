@@ -39,6 +39,24 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("tasks", "subtask", "change"),
         ("tasks", "subtask", "delete"),
         ("tasks", "subtask", "view"),
+        # Colaboradores
+        ("collaborators", "collaborator", "add"),
+        ("collaborators", "collaborator", "change"),
+        ("collaborators", "collaborator", "delete"),
+        ("collaborators", "collaborator", "view"),
+        ("collaborators", "orgchartedge", "add"),
+        ("collaborators", "orgchartedge", "change"),
+        ("collaborators", "orgchartedge", "delete"),
+        ("collaborators", "orgchartedge", "view"),
+        ("collaborators", "orgchartnote", "add"),
+        ("collaborators", "orgchartnote", "change"),
+        ("collaborators", "orgchartnote", "delete"),
+        ("collaborators", "orgchartnote", "view"),
+        # Setores
+        ("departments", "department", "add"),
+        ("departments", "department", "change"),
+        ("departments", "department", "delete"),
+        ("departments", "department", "view"),
     ],
     # GERENCIADOR DE PROJETOS - Gerencia projetos (CRUD)
     "Gerenciador de Projetos": [
@@ -49,6 +67,11 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         # Apenas visualizar kanban
         ("tasks", "task", "view"),
         ("tasks", "subtask", "view"),
+        # Visualizar colaboradores e setores
+        ("collaborators", "collaborator", "view"),
+        ("collaborators", "orgchartedge", "view"),
+        ("collaborators", "orgchartnote", "view"),
+        ("departments", "department", "view"),
     ],
     # GERENCIADOR DE KANBAN - Gerencia tarefas (CRUD)
     "Gerenciador de Kanban": [
@@ -62,24 +85,41 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("tasks", "subtask", "view"),
         # Apenas visualizar projetos
         ("projectsmanager", "project", "view"),
+        # Visualizar colaboradores e setores
+        ("collaborators", "collaborator", "view"),
+        ("collaborators", "orgchartedge", "view"),
+        ("collaborators", "orgchartnote", "view"),
+        ("departments", "department", "view"),
     ],
     # VISUALIZADOR COMPLETO - Apenas leitura em tudo
     "Visualizador Completo": [
         ("projectsmanager", "project", "view"),
         ("tasks", "task", "view"),
         ("tasks", "subtask", "view"),
+        ("collaborators", "collaborator", "view"),
+        ("collaborators", "orgchartedge", "view"),
+        ("collaborators", "orgchartnote", "view"),
+        ("departments", "department", "view"),
     ],
     # VISUALIZADOR DE PROJETOS - Apenas visualiza projetos
     "Visualizador de Projetos": [
         ("projectsmanager", "project", "view"),
         ("tasks", "task", "view"),
         ("tasks", "subtask", "view"),
+        ("collaborators", "collaborator", "view"),
+        ("collaborators", "orgchartedge", "view"),
+        ("collaborators", "orgchartnote", "view"),
+        ("departments", "department", "view"),
     ],
     # VISUALIZADOR DE KANBAN - Apenas visualiza kanban
     "Visualizador de Kanban": [
         ("tasks", "task", "view"),
         ("tasks", "subtask", "view"),
         ("projectsmanager", "project", "view"),
+        ("collaborators", "collaborator", "view"),
+        ("collaborators", "orgchartedge", "view"),
+        ("collaborators", "orgchartnote", "view"),
+        ("departments", "department", "view"),
     ],
     # GRUPO - Apenas para organizacao, sem permissoes especificas
     "GRUPO": [],

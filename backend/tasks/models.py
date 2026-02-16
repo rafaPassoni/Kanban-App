@@ -1,13 +1,13 @@
 """Modelos do app tasks.
 
-Define projetos (cards do kanban), subtarefas e seus vinculos com responsaveis.
+Define tarefas (cards do kanban), subtarefas e seus vinculos com responsaveis.
 """
 
 from django.db import models
 
 
 class Task(models.Model):
-    """Representa um projeto no kanban com status, prioridade e relacoes."""
+    """Representa uma tarefa no kanban com status, prioridade e relacoes."""
 
     STATUS_CHOICES = [
         ("TODO", "A Fazer"),
@@ -48,7 +48,7 @@ class Task(models.Model):
         null=True,
         blank=True,
         related_name="tasks",
-        verbose_name="Projeto Legado",
+        verbose_name="Projeto",
         db_index=True,
     )
     responsavel = models.ForeignKey(
@@ -83,8 +83,8 @@ class Task(models.Model):
 
     class Meta:
         """Ordena por `order` e, em empate, pelas mais recentes."""
-        verbose_name = "Projeto"
-        verbose_name_plural = "Projetos"
+        verbose_name = "Tarefa"
+        verbose_name_plural = "Tarefas"
         ordering = ["order", "-created_at"]
 
     def __str__(self):
@@ -98,7 +98,7 @@ class Subtask(models.Model):
         Task,
         on_delete=models.CASCADE,
         related_name="subtasks",
-        verbose_name="Projeto",
+        verbose_name="Tarefa",
         db_index=True,
     )
     title = models.TextField(verbose_name="Título")

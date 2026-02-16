@@ -3,7 +3,7 @@
 Aplica regras de permissao e escopo por departamento na listagem de projetos.
 """
 
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
@@ -14,7 +14,11 @@ from departments.models import DepartmentAccess
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """CRUD de projetos com controle fino via permissões granulares."""
-    queryset = Project.objects.prefetch_related('responsible_collaborators', 'used_by_departments')
+    queryset = Project.objects.prefetch_related(
+        'responsible_collaborators',
+        'used_by_departments',
+        Prefetch('user_accesses', queryset=UserProjectAccess.objects.select_related('user')),
+    )
     serializer_class = ProjectSerializer
     parser_classes = (MultiPartParser, FormParser, JSONParser)
     permission_classes = [IsAuthenticated, GranularProjectPermissions]

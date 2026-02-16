@@ -1,18 +1,24 @@
-# Usar Node.js como base
-FROM node:18
-
-# Definir diretório de trabalho
+# Stage 1: Dependencies
+FROM node:18-alpine AS deps
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-# Copiar arquivos de dependências e instalar
-COPY package.json package-lock.json /app/
-RUN npm install
+# Stage 2: Build
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
 
-# Copiar todo o código do frontend
-COPY . /app/
+# Stage 3: Run
+FROM node:18-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
 
-# Expor a porta do Next.js
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
 EXPOSE 3000
-
-# Rodar o servidor de desenvolvimento do Next.js
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]

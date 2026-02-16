@@ -23,7 +23,7 @@ email = os.getenv('DJANGO_ADMIN_EMAIL', 'admin@example.com')
 password = os.getenv('DJANGO_ADMIN_PASSWORD', 'admin')
 if not User.objects.filter(username=username).exists():
     User.objects.create_superuser(username=username, email=email, password=password)
-    print(f"✅ Superusuário criado: {username} / {password}")
+    print(f"✅ Superusuário criado: {username}")
 else:
     print("ℹ️ Superusuário já existe.")
 END

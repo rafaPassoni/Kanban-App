@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Clock, User, Briefcase } from "lucide-react";
 import styles from "./page.module.css";
 import { API_TASKS_PUBLIC } from "@/constants/api";
+import { extractResults } from "@/lib/api";
 import { parseISODateLocal } from "@/app/components/DateInputBRNative";
 
 // ====================
@@ -26,7 +27,7 @@ interface Task {
 }
 
 // ====================
-// Configuracao
+// Configuração
 // ====================
 const AUTO_REFRESH_INTERVAL = 30000; // 30 segundos
 
@@ -64,7 +65,7 @@ const COLUMN_STYLES = {
 } as const;
 
 // ====================
-// Pagina
+// Página
 // ====================
 export default function KanbanTVPage() {
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -81,7 +82,7 @@ export default function KanbanTVPage() {
 
             if (tasksRes.ok) {
                 const tasksData = await tasksRes.json();
-                setTasks(Array.isArray(tasksData) ? tasksData : []);
+                setTasks(extractResults<Task>(tasksData));
             }
 
             setLastUpdate(new Date());
@@ -93,7 +94,7 @@ export default function KanbanTVPage() {
     }, []);
 
     // ====================
-    // Atualizacao automatica
+    // Atualização automática
     // ====================
     useEffect(() => {
         fetchData();
@@ -285,7 +286,7 @@ export default function KanbanTVPage() {
                                 </h2>
                             </div>
 
-                            {/* Conteudo da coluna */}
+                            {/* Conteúdo da coluna */}
                             <div className={styles.columnContent}>
                                 {columnTasks.length === 0 ? (
                                     <div className={styles.emptyColumn}>
@@ -344,11 +345,11 @@ export default function KanbanTVPage() {
                                                         </div>
                                                     )}
 
-                                                    {/* Responsável */}
-                                                    {task.responsavel_name && (
+                                                    {/* Responsáveis */}
+                                                    {task.assigned_to_names && task.assigned_to_names.length > 0 && (
                                                         <div className={styles.metaRow}>
                                                             <User className={styles.iconXs} />
-                                                            <span className={styles.metaText}>{task.responsavel_name}</span>
+                                                            <span className={styles.metaText}>{task.assigned_to_names.join(", ")}</span>
                                                         </div>
                                                     )}
 

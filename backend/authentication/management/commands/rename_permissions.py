@@ -20,7 +20,10 @@ ACTION_LABELS = {
 PERMISSION_LABELS = {
     ("projectsmanager", "project"): ("Projetos", "/projects", "Projeto"),
     ("collaborators", "collaborator"): ("Colaboradores", "/collaborators", "Colaborador"),
+    ("collaborators", "orgchartedge"): ("Colaboradores", "/collaborators/orgchart", "Conexão do Organograma"),
+    ("collaborators", "orgchartnote"): ("Colaboradores", "/collaborators/orgchart", "Nota do Organograma"),
     ("departments", "department"): ("Setores", "/departments", "Setor"),
+    ("departments", "departmentaccess"): ("Setores", "/departments/access", "Acesso a Setor"),
     ("tasks", "task"): ("Kanban", "/kanban", "Tarefa"),
     ("tasks", "subtask"): ("Kanban", "/kanban", "Subtarefa"),
     ("auth", "user"): ("Autenticação", "/admin/auth/user", "Usuário"),

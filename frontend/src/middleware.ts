@@ -1,4 +1,5 @@
 import { NextResponse, type MiddlewareConfig, type NextRequest } from "next/server";
+import { isJwtExpired } from "@/lib/jwt";
 
 // Rotas publicas que nao exigem sessao ativa.
 const publicRoutes = [
@@ -10,26 +11,6 @@ const publicPrefixes = ["/kanban/tv"] as const;
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/login";
 const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/";
-
-function isJwtExpired(token: string | undefined): boolean {
-    if (!token) return true;
-
-    try {
-        const [, payloadBase64Url] = token.split(".");
-        if (!payloadBase64Url) return true;
-
-        const base64 = payloadBase64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
-
-        const payloadJson = atob(padded);
-        const payload = JSON.parse(payloadJson) as { exp?: number };
-
-        if (!payload.exp) return true;
-        return payload.exp * 1000 < Date.now();
-    } catch {
-        return true;
-    }
-}
 
 function hasValidSession(accessToken?: string, refreshToken?: string): boolean {
     if (accessToken && !isJwtExpired(accessToken)) return true;
