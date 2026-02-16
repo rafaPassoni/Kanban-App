@@ -44,14 +44,6 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("collaborators", "collaborator", "change"),
         ("collaborators", "collaborator", "delete"),
         ("collaborators", "collaborator", "view"),
-        ("collaborators", "orgchartedge", "add"),
-        ("collaborators", "orgchartedge", "change"),
-        ("collaborators", "orgchartedge", "delete"),
-        ("collaborators", "orgchartedge", "view"),
-        ("collaborators", "orgchartnote", "add"),
-        ("collaborators", "orgchartnote", "change"),
-        ("collaborators", "orgchartnote", "delete"),
-        ("collaborators", "orgchartnote", "view"),
         # Setores
         ("departments", "department", "add"),
         ("departments", "department", "change"),
@@ -69,8 +61,6 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("tasks", "subtask", "view"),
         # Visualizar colaboradores e setores
         ("collaborators", "collaborator", "view"),
-        ("collaborators", "orgchartedge", "view"),
-        ("collaborators", "orgchartnote", "view"),
         ("departments", "department", "view"),
     ],
     # GERENCIADOR DE KANBAN - Gerencia tarefas (CRUD)
@@ -87,8 +77,6 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("projectsmanager", "project", "view"),
         # Visualizar colaboradores e setores
         ("collaborators", "collaborator", "view"),
-        ("collaborators", "orgchartedge", "view"),
-        ("collaborators", "orgchartnote", "view"),
         ("departments", "department", "view"),
     ],
     # VISUALIZADOR COMPLETO - Apenas leitura em tudo
@@ -97,8 +85,6 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("tasks", "task", "view"),
         ("tasks", "subtask", "view"),
         ("collaborators", "collaborator", "view"),
-        ("collaborators", "orgchartedge", "view"),
-        ("collaborators", "orgchartnote", "view"),
         ("departments", "department", "view"),
     ],
     # VISUALIZADOR DE PROJETOS - Apenas visualiza projetos
@@ -107,8 +93,6 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("tasks", "task", "view"),
         ("tasks", "subtask", "view"),
         ("collaborators", "collaborator", "view"),
-        ("collaborators", "orgchartedge", "view"),
-        ("collaborators", "orgchartnote", "view"),
         ("departments", "department", "view"),
     ],
     # VISUALIZADOR DE KANBAN - Apenas visualiza kanban
@@ -117,8 +101,6 @@ GROUP_PERMISSIONS: Dict[str, List[Tuple[str, str, str]]] = {
         ("tasks", "subtask", "view"),
         ("projectsmanager", "project", "view"),
         ("collaborators", "collaborator", "view"),
-        ("collaborators", "orgchartedge", "view"),
-        ("collaborators", "orgchartnote", "view"),
         ("departments", "department", "view"),
     ],
     # GRUPO - Apenas para organizacao, sem permissoes especificas
