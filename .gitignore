@@ -1,0 +1,44 @@
+# Projeto
+CHANGELOG.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.Python
+*.sqlite3
+
+# Virtualenv
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+.next/
+out/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Django
+backend/staticfiles/
+backend/mediafiles/

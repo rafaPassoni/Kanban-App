@@ -1,0 +1,42 @@
+{
+    "name": "kanban-app",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "lint:fix": "next lint --fix",
+        "format": "prettier --write ."
+    },
+    "dependencies": {
+        "@radix-ui/react-slot": "^1.2.4",
+        "axios": "^1.13.2",
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "js-cookie": "^3.0.5",
+        "lucide-react": "^0.511.0",
+        "next": "^15.5.7",
+        "react": "^19.2.1",
+        "react-bootstrap-icons": "^1.11.6",
+        "react-dom": "^19.2.1",
+        "react-toastify": "^11.0.5",
+        "tailwind-merge": "^3.4.0"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3",
+        "@tailwindcss/postcss": "^4",
+        "@types/js-cookie": "^3.0.6",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "15.3.2",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "prettier": "^3.4.2",
+        "tailwindcss": "^4",
+        "typescript": "^5"
+    }
+}

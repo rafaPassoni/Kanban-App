@@ -1,0 +1,61 @@
+services:
+    web:
+        build:
+            context: ./backend
+        container_name: kanban_app_backend
+        command: >
+            sh -c "python manage.py migrate &&
+                   python manage.py rename_permissions &&
+                   gunicorn app.wsgi:application --bind 0.0.0.0:8000 --workers 4 --worker-class gevent --timeout 600"
+        volumes:
+            - ./backend:/app
+        ports:
+            - "8022:8000"
+        env_file:
+            - ./backend/.env
+        depends_on:
+            db:
+                condition: service_healthy
+        restart: unless-stopped
+
+    frontend:
+      build:
+        context: ./frontend
+      container_name: kanban_app_frontend
+      ports:
+        - "3022:3000"
+      volumes:
+        - ./frontend:/app
+        - /app/node_modules
+        - /app/.next
+      env_file:
+        - ./frontend/.env
+      stdin_open: true
+      tty: true
+    #   restart: unless-stopped
+
+    db:
+        image: postgres:15
+        container_name: kanban_app_postgres
+        env_file:
+            - ./backend/.env
+            - ./.env
+        environment:
+            POSTGRES_DB: ${DB_NAME}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            TZ: America/Sao_Paulo
+            PGTZ: America/Sao_Paulo
+        ports:
+            - "5442:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+            interval: 5s
+            timeout: 5s
+            retries: 20
+        restart: unless-stopped
+
+volumes:
+    pgdata:
