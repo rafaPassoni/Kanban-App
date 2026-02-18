@@ -36,7 +36,7 @@ class TestTokenAuth:
 
 @pytest.mark.django_db
 class TestUserEndpoints:
-    """Testes de endpoints de usuario e permissoes."""
+    """Testes de endpoints de usuario."""
 
     def test_current_user(self, admin_client, admin_user):
         res = admin_client.get("/api/users/me/")
@@ -47,17 +47,14 @@ class TestUserEndpoints:
         res = anon_client.get("/api/users/me/")
         assert res.status_code == 401
 
-    def test_user_permissions(self, admin_client):
-        res = admin_client.get("/api/users/me/permissions/")
-        assert res.status_code == 200
-        assert "permissions" in res.data
-        assert isinstance(res.data["permissions"], list)
-
     def test_full_access(self, admin_client, admin_user):
         res = admin_client.get("/api/users/me/full-access/")
         assert res.status_code == 200
         assert res.data["user"]["username"] == admin_user.username
-        assert "permissions" in res.data
+
+    def test_full_access_anonymous(self, anon_client):
+        res = anon_client.get("/api/users/me/full-access/")
+        assert res.status_code == 401
 
 
 @pytest.mark.django_db

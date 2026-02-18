@@ -1,10 +1,6 @@
-"""Modelos do app projectsmanager.
-
-Define projetos, seus vinculos e um proxy para a "Central de Acessos".
-"""
+"""Modelos do app projectsmanager."""
 
 from django.db import models
-from django.conf import settings
 
 
 class Project(models.Model):
@@ -45,63 +41,3 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class AccessCenter(Project):
-    """Proxy de `Project` para restringir permissoes a visualizacao."""
-    class Meta:
-        """Nao cria tabela nova; apenas muda permissoes e rotulos no Admin."""
-        proxy = True
-        default_permissions = ("view",)
-        verbose_name = "Central de Acessos"
-        verbose_name_plural = "Central de Acessos"
-
-
-class UserProjectAccess(models.Model):
-    """
-    Controla permissões granulares de usuários sobre projetos específicos.
-    Permite que admins definam exatamente quais projetos um usuário pode ver/editar.
-    """
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='project_accesses',
-        verbose_name='Usuário'
-    )
-    project = models.ForeignKey(
-        'Project',
-        on_delete=models.CASCADE,
-        related_name='user_accesses',
-        verbose_name='Projeto'
-    )
-    can_view = models.BooleanField(
-        default=True,
-        verbose_name='Pode Visualizar',
-        help_text='Permite que o usuário veja este projeto na Central de Acessos'
-    )
-    can_edit = models.BooleanField(
-        default=False,
-        verbose_name='Pode Editar',
-        help_text='Permite que o usuário edite este projeto'
-    )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado Em')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado Em')
-
-    class Meta:
-        verbose_name = 'Acesso de Usuário a Projeto'
-        verbose_name_plural = 'Acessos de Usuários a Projetos'
-        constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'project'],
-                name='unique_user_project_access'
-            )
-        ]
-        ordering = ['-created_at']
-
-    def __str__(self):
-        permissions = []
-        if self.can_view:
-            permissions.append('visualizar')
-        if self.can_edit:
-            permissions.append('editar')
-        return f"{self.user.username} -> {self.project.name} ({', '.join(permissions)})"

@@ -1,11 +1,7 @@
-"""Views do app collaborators.
-
-Fornece CRUD de colaboradores.
-"""
+"""Views do app collaborators."""
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from authentication.permission_checkers import EnhancedDjangoModelPermissions
 from .models import Collaborator
 from .serializers import CollaboratorSerializer
 
@@ -15,7 +11,7 @@ class CollaboratorViewSet(viewsets.ModelViewSet):
 
     queryset = Collaborator.objects.select_related('department')
     serializer_class = CollaboratorSerializer
-    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """Aplica filtro opcional `?is_active=true|false` na listagem."""

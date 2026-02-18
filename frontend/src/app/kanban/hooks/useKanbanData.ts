@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import AuthService from "@/services/auth";
-import AccessService from "@/services/access";
 import { API_TASKS, API_PROJECTS, API_COLLABORATORS, API_DEPARTMENTS } from "@/constants/api";
 import { extractResults } from "@/lib/api";
 import type { Task, Project, Collaborator, Department } from "../types";
@@ -13,23 +12,11 @@ export function useKanbanData() {
     const [collaborators, setCollaborators] = useState<Collaborator[]>([]);
     const [departments, setDepartments] = useState<Department[]>([]);
     const [loading, setLoading] = useState(true);
-    const [perms, setPerms] = useState({
-        canAdd: false,
-        canChange: false,
-        canDelete: false,
-    });
+
+    const perms = { canAdd: true, canChange: true, canDelete: true };
 
     const authedFetch = useCallback((input: RequestInfo, init: RequestInit = {}) => {
         return AuthService.fetchWithAuth(input, init);
-    }, []);
-
-    const loadPermissions = useCallback(async () => {
-        const p = await AccessService.getUserPermissions();
-        setPerms({
-            canAdd: AccessService.has(p, "add", "task"),
-            canChange: AccessService.has(p, "change", "task"),
-            canDelete: AccessService.has(p, "delete", "task"),
-        });
     }, []);
 
     const fetchData = useCallback(async (options?: { silent?: boolean }) => {
@@ -125,8 +112,7 @@ export function useKanbanData() {
 
     useEffect(() => {
         fetchData();
-        loadPermissions();
-    }, [fetchData, loadPermissions]);
+    }, [fetchData]);
 
     useEffect(() => {
         let intervalId: number | null = null;

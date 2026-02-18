@@ -15,8 +15,6 @@ import type { LucideProps } from "lucide-react";
 import logo from "../../../public/logo.png";
 import AuthService from "@/services/auth";
 import { Button } from "@/components/ui/button";
-import { getAllowedRoutes } from "@/lib/permissionUtils";
-import type { UserPermissions } from "@/lib/permissionUtils";
 
 type NavItem = {
   label: string;
@@ -24,19 +22,9 @@ type NavItem = {
   icon: React.ComponentType<LucideProps>;
 };
 
-function safeParseJSON<T>(raw: string | null): T | null {
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as T;
-  } catch {
-    return null;
-  }
-}
-
 export default function NavHoverIcons() {
   const pathname = usePathname();
 
-  const [allowedHrefs, setAllowedHrefs] = useState<string[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const directLinks = useMemo(
@@ -48,38 +36,6 @@ export default function NavHoverIcons() {
     [],
   );
 
-  const loadAllowedRoutes = useCallback(() => {
-    if (typeof window === "undefined") return;
-
-    const userPermissions = safeParseJSON<UserPermissions>(
-      sessionStorage.getItem("isStaff"),
-    );
-
-    if (!userPermissions) {
-      setAllowedHrefs([]);
-      return;
-    }
-
-    const allowed = getAllowedRoutes(userPermissions);
-    setAllowedHrefs(Array.isArray(allowed) ? allowed : []);
-  }, []);
-
-  useEffect(() => {
-    loadAllowedRoutes();
-
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === "isStaff") loadAllowedRoutes();
-    };
-    const onPermissionsUpdated = () => loadAllowedRoutes();
-
-    window.addEventListener("storage", onStorage);
-    window.addEventListener("permissions-updated", onPermissionsUpdated);
-    return () => {
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("permissions-updated", onPermissionsUpdated);
-    };
-  }, [loadAllowedRoutes]);
-
   const isActive = useCallback(
     (href: string) => {
       if (!pathname) return false;
@@ -88,12 +44,6 @@ export default function NavHoverIcons() {
     },
     [pathname],
   );
-
-  const visibleDirectLinks = useMemo(() => {
-    return directLinks.filter((item) =>
-      allowedHrefs.includes(item.href),
-    );
-  }, [directLinks, allowedHrefs]);
 
   // Fecha menu mobile ao navegar
   useEffect(() => {
@@ -144,7 +94,7 @@ export default function NavHoverIcons() {
           <div className="flex items-center gap-1 sm:gap-4">
             <div className="hidden items-center gap-2 lg:flex">
               {/* Links diretos */}
-              {visibleDirectLinks.map(
+              {directLinks.map(
                 ({ label, href, icon: IconComponent }) => {
                 const active = isActive(href);
 
@@ -251,7 +201,7 @@ export default function NavHoverIcons() {
         {/* Conteúdo do drawer - scrollável */}
         <div className="flex-1 overflow-y-auto px-3 py-3">
           {/* Links diretos mobile */}
-          {visibleDirectLinks.map(
+          {directLinks.map(
             ({ label, href, icon: IconComponent }) => {
               const active = isActive(href);
 

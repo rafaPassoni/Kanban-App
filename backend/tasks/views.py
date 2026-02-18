@@ -1,11 +1,7 @@
-"""Views do app tasks (kanban).
-
-Centraliza listagens com filtros por projeto/status/responsavel/departamento.
-"""
+"""Views do app tasks (kanban)."""
 
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from authentication.permission_checkers import EnhancedDjangoModelPermissions
 from .models import Subtask, Task
 from .serializers import PublicTaskSerializer, SubtaskSerializer, TaskSerializer
 
@@ -13,7 +9,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     """CRUD de tarefas (cards do kanban) com otimizacoes de queryset e filtros."""
     queryset = Task.objects.select_related('project', 'responsavel').prefetch_related('assigned_to', 'department', 'subtasks').order_by('order', '-id')
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         """Aplica filtros opcionais para reduzir payload e consultas no cliente."""
@@ -50,4 +46,4 @@ class SubtaskViewSet(viewsets.ModelViewSet):
     """CRUD de subtarefas ordenadas por `order` e data de criacao."""
     queryset = Subtask.objects.select_related("task").order_by("order", "created_at")
     serializer_class = SubtaskSerializer
-    permission_classes = [IsAuthenticated, EnhancedDjangoModelPermissions]
+    permission_classes = [IsAuthenticated]

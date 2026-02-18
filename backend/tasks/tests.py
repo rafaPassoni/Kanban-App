@@ -1,7 +1,6 @@
 """Testes de API para o app tasks (Task e Subtask)."""
 
 import pytest
-from django.urls import reverse
 from tasks.models import Subtask, Task
 
 
@@ -28,7 +27,7 @@ class TestTaskAPI:
         assert res.status_code == 401
 
     # ---- Create
-    def test_create_as_admin(self, admin_client, project):
+    def test_create(self, admin_client, project):
         res = admin_client.post(self.url, {
             "title": "Nova tarefa",
             "status": "TODO",
@@ -38,33 +37,22 @@ class TestTaskAPI:
         assert res.status_code == 201
         assert res.data["title"] == "Nova tarefa"
 
-    def test_create_as_viewer_forbidden(self, viewer_client):
-        res = viewer_client.post(self.url, {"title": "Nao deveria", "status": "TODO"})
-        assert res.status_code == 403
-
-    def test_create_no_perms_forbidden(self, nogroup_client):
-        res = nogroup_client.post(self.url, {"title": "Nao deveria", "status": "TODO"})
-        assert res.status_code == 403
+    def test_create_regular_user(self, auth_client):
+        """Qualquer usuario autenticado pode criar tasks."""
+        res = auth_client.post(self.url, {"title": "Task regular", "status": "TODO"})
+        assert res.status_code == 201
 
     # ---- Update
-    def test_update_as_admin(self, admin_client, task):
+    def test_update(self, admin_client, task):
         res = admin_client.patch(self.detail_url(task.id), {"title": "Editada"})
         assert res.status_code == 200
         assert res.data["title"] == "Editada"
 
-    def test_update_as_viewer_forbidden(self, viewer_client, task):
-        res = viewer_client.patch(self.detail_url(task.id), {"title": "Nope"})
-        assert res.status_code == 403
-
     # ---- Delete
-    def test_delete_as_admin(self, admin_client, task):
+    def test_delete(self, admin_client, task):
         res = admin_client.delete(self.detail_url(task.id))
         assert res.status_code == 204
         assert not Task.objects.filter(id=task.id).exists()
-
-    def test_delete_as_viewer_forbidden(self, viewer_client, task):
-        res = viewer_client.delete(self.detail_url(task.id))
-        assert res.status_code == 403
 
     # ---- Filters
     def test_filter_by_project(self, admin_client, task):
@@ -96,10 +84,6 @@ class TestSubtaskAPI:
         assert res.status_code == 201
         assert res.data["title"] == "Sub 1"
         assert res.data["is_done"] is False
-
-    def test_create_subtask_viewer_forbidden(self, viewer_client, task):
-        res = viewer_client.post(self.url, {"task": task.id, "title": "Sub viewer"})
-        assert res.status_code == 403
 
     # ---- Update
     def test_toggle_subtask_done(self, admin_client, task):

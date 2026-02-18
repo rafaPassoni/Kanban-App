@@ -9,9 +9,6 @@ export const API_BASE = process.env.NEXT_PUBLIC_URL;
 export const API_TOKEN = `${API_BASE}/api/token/`;
 export const API_TOKEN_REFRESH = `${API_BASE}/api/token/refresh/`;
 export const API_LOGOUT = `${API_BASE}/api/logout/`;
-export const API_PERMISSIONS = `${API_BASE}/api/permissions/`;
-export const API_USER_PERMISSIONS = `${API_BASE}/api/users/me/permissions/`;
-export const API_USER_FULL_ACCESS = `${API_BASE}/api/users/me/full-access/`;
 
 // Kanban
 export const API_TASKS = `${API_BASE}/api/v1/tasks`;

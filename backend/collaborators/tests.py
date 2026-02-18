@@ -40,11 +40,13 @@ class TestCollaboratorAPI:
         assert res.status_code == 201
         assert res.data["name"] == "Maria Souza"
 
-    def test_create_viewer_forbidden(self, viewer_client):
-        res = viewer_client.post(self.url, {
-            "name": "Nope", "email": "nope@test.com",
+    def test_create_regular_user(self, auth_client, department):
+        """Qualquer usuario autenticado pode criar colaboradores."""
+        res = auth_client.post(self.url, {
+            "name": "Pedro Lima", "email": "pedro@test.com",
+            "department": department.id,
         })
-        assert res.status_code == 403
+        assert res.status_code == 201
 
     def test_create_duplicate_email(self, admin_client, collaborator):
         res = admin_client.post(self.url, {
@@ -65,7 +67,3 @@ class TestCollaboratorAPI:
         res = admin_client.delete(self.detail_url(collaborator.id))
         assert res.status_code == 204
         assert not Collaborator.objects.filter(id=collaborator.id).exists()
-
-    def test_delete_viewer_forbidden(self, viewer_client, collaborator):
-        res = viewer_client.delete(self.detail_url(collaborator.id))
-        assert res.status_code == 403

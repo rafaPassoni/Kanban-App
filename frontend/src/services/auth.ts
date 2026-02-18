@@ -166,14 +166,6 @@ export const AuthService = {
     Cookies.remove("accessToken", { path: "/" });
     Cookies.remove("refreshToken", { path: "/" });
 
-    try {
-      sessionStorage.removeItem("allPerms");
-      sessionStorage.removeItem("userPerms");
-      sessionStorage.removeItem("isStaff");
-    } catch {
-      // Ignora erros de storage
-    }
-
     window.location.assign(redirectTo);
   },
 

@@ -1,10 +1,9 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/app/components/Navbar";
 import AuthService from "@/services/auth";
-import AccessService from "@/services/access";
 import { FolderOpen, Users, Building2 } from "lucide-react";
 import ResponsaveisTab from "./components/ResponsaveisTab";
 import ProjetosTab from "./components/ProjetosTab";
@@ -17,29 +16,6 @@ export default function ProjetosPage() {
         async (url: string, options?: RequestInit) => AuthService.fetchWithAuth(url, options),
         [],
     );
-
-    // Permissões
-    const [perms, setPerms] = useState({
-        canAddResp: false, canEditResp: false, canDeleteResp: false,
-        canAddProj: false, canEditProj: false, canDeleteProj: false,
-        canAddDept: false, canEditDept: false, canDeleteDept: false,
-    });
-
-    useEffect(() => {
-        AccessService.getUserPermissions().then((p) => {
-            setPerms({
-                canAddResp: AccessService.has(p, "add", "collaborator"),
-                canEditResp: AccessService.has(p, "change", "collaborator"),
-                canDeleteResp: AccessService.has(p, "delete", "collaborator"),
-                canAddProj: AccessService.has(p, "add", "task"),
-                canEditProj: AccessService.has(p, "change", "task"),
-                canDeleteProj: AccessService.has(p, "delete", "task"),
-                canAddDept: AccessService.has(p, "add", "department"),
-                canEditDept: AccessService.has(p, "change", "department"),
-                canDeleteDept: AccessService.has(p, "delete", "department"),
-            });
-        });
-    }, []);
 
     const tabClass = (tab: string) => [
         "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors cursor-pointer",
@@ -74,25 +50,25 @@ export default function ProjetosPage() {
                 {activeTab === "responsaveis" && (
                     <ResponsaveisTab
                         authedFetch={authedFetch}
-                        canAdd={perms.canAddResp}
-                        canEdit={perms.canEditResp}
-                        canDelete={perms.canDeleteResp}
+                        canAdd={true}
+                        canEdit={true}
+                        canDelete={true}
                     />
                 )}
                 {activeTab === "projetos" && (
                     <ProjetosTab
                         authedFetch={authedFetch}
-                        canAdd={perms.canAddProj}
-                        canEdit={perms.canEditProj}
-                        canDelete={perms.canDeleteProj}
+                        canAdd={true}
+                        canEdit={true}
+                        canDelete={true}
                     />
                 )}
                 {activeTab === "setores" && (
                     <SetoresTab
                         authedFetch={authedFetch}
-                        canAdd={perms.canAddDept}
-                        canEdit={perms.canEditDept}
-                        canDelete={perms.canDeleteDept}
+                        canAdd={true}
+                        canEdit={true}
+                        canDelete={true}
                     />
                 )}
             </main>

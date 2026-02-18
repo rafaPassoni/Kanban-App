@@ -31,11 +31,12 @@ class TestDepartmentAPI:
         assert res.status_code == 201
         assert res.data["name"] == "Marketing"
 
-    def test_create_viewer_forbidden(self, viewer_client):
-        res = viewer_client.post(self.url, {
-            "name": "Nope", "department_type": "main",
+    def test_create_regular_user(self, auth_client):
+        """Qualquer usuario autenticado pode criar departamentos."""
+        res = auth_client.post(self.url, {
+            "name": "RH", "department_type": "main",
         })
-        assert res.status_code == 403
+        assert res.status_code == 201
 
     # ---- Update
     def test_update(self, admin_client, department):
@@ -50,10 +51,6 @@ class TestDepartmentAPI:
         res = admin_client.delete(self.detail_url(department.id))
         assert res.status_code == 204
         assert not Department.objects.filter(id=department.id).exists()
-
-    def test_delete_viewer_forbidden(self, viewer_client, department):
-        res = viewer_client.delete(self.detail_url(department.id))
-        assert res.status_code == 403
 
     # ---- Subdepartment validation
     def test_create_subdepartment(self, admin_client, department):

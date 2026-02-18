@@ -23,6 +23,12 @@ class TestProjectAPI:
         res = anon_client.get(self.url)
         assert res.status_code == 401
 
+    def test_list_regular_user(self, auth_client, project):
+        """Qualquer usuario autenticado pode listar projetos."""
+        res = auth_client.get(self.url)
+        assert res.status_code == 200
+        assert res.data["count"] >= 1
+
     # ---- Create
     def test_create(self, admin_client):
         res = admin_client.post(self.url, {
@@ -31,9 +37,10 @@ class TestProjectAPI:
         assert res.status_code == 201
         assert res.data["name"] == "Novo Projeto"
 
-    def test_create_viewer_forbidden(self, viewer_client):
-        res = viewer_client.post(self.url, {"name": "Nope"})
-        assert res.status_code == 403
+    def test_create_regular_user(self, auth_client):
+        """Qualquer usuario autenticado pode criar projetos."""
+        res = auth_client.post(self.url, {"name": "Projeto Regular"})
+        assert res.status_code == 201
 
     # ---- Update
     def test_update(self, admin_client, project):
@@ -43,21 +50,11 @@ class TestProjectAPI:
         assert res.status_code == 200
         assert res.data["name"] == "Projeto Renomeado"
 
-    def test_update_viewer_forbidden(self, viewer_client, project):
-        res = viewer_client.patch(
-            self.detail_url(project.id), {"name": "Nope"}
-        )
-        assert res.status_code == 403
-
     # ---- Delete
     def test_delete(self, admin_client, project):
         res = admin_client.delete(self.detail_url(project.id))
         assert res.status_code == 204
         assert not Project.objects.filter(id=project.id).exists()
-
-    def test_delete_viewer_forbidden(self, viewer_client, project):
-        res = viewer_client.delete(self.detail_url(project.id))
-        assert res.status_code == 403
 
     # ---- Retrieve
     def test_retrieve(self, admin_client, project):

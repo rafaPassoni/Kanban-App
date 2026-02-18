@@ -1,9 +1,5 @@
-"""Modelos do app departments.
+"""Modelos do app departments."""
 
-Define os setores e o vinculo explicito de acesso por usuario.
-"""
-
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -67,35 +63,3 @@ class Department(models.Model):
         # Garante validacoes de hierarquia em qualquer caminho de persistencia.
         self.full_clean()
         return super().save(*args, **kwargs)
-
-
-class DepartmentAccess(models.Model):
-    """Mapeia quais usuarios tem acesso a quais setores."""
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="department_accesses",
-        verbose_name="Usuario",
-    )
-    department = models.ForeignKey(
-        Department,
-        on_delete=models.CASCADE,
-        related_name="user_accesses",
-        verbose_name="Setor",
-    )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
-
-    class Meta:
-        verbose_name = "Acesso por Setor"
-        verbose_name_plural = "Acessos por Setor"
-        # Evita duplicidade de acesso para o mesmo usuario/setor.
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "department"],
-                name="unique_department_access",
-            )
-        ]
-
-    def __str__(self):
-        return f"{self.user} -> {self.department}"

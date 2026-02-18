@@ -1,23 +1,20 @@
-﻿"use client";
+"use client";
 
 import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CircleUser, User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import AuthService from "@/services/auth";
-import { API_PERMISSIONS, API_USER_PERMISSIONS, API_USER_FULL_ACCESS, API_TOKEN } from "@/constants/api";
-import { getAllowedRoutes, getFirstAllowedRoute } from "@/lib/permissionUtils";
-import type { UserPermissions } from "@/lib/permissionUtils";
+import { API_TOKEN } from "@/constants/api";
 
 // ====================
 // Componentes
 // ====================
 function LoginScreenContent() {
     const router = useRouter();
-    const searchParams = useSearchParams();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -81,35 +78,6 @@ function LoginScreenContent() {
         return ok;
     }, [username, password, setSafeErrors]);
 
-    const authHeaders = useCallback(() => {
-        const accessToken = AuthService.getAccessToken();
-        if (!accessToken) throw new Error("Token de acesso ausente");
-        return { Authorization: `Bearer ${accessToken}` };
-    }, []);
-
-    const getPermissionsAndRedirect = useCallback(async () => {
-        // 3 requests em paralelo = mais rapido
-        const [allPerms, userPerms, userStaffVerification] = await Promise.all([
-            axios.get(API_PERMISSIONS, { headers: authHeaders() }),
-            axios.get(API_USER_PERMISSIONS, { headers: authHeaders() }),
-            axios.get(API_USER_FULL_ACCESS, { headers: authHeaders() }),
-        ]);
-
-        sessionStorage.setItem("allPerms", JSON.stringify(allPerms.data));
-        sessionStorage.setItem("userPerms", JSON.stringify(userPerms.data));
-        sessionStorage.setItem("isStaff", JSON.stringify(userStaffVerification.data));
-
-        const userPermissions: UserPermissions = userStaffVerification.data;
-        const allowedRoutes = getAllowedRoutes(userPermissions);
-        const firstAllowedRoute = getFirstAllowedRoute(userPermissions);
-
-        const nextParam = searchParams?.get("next") || "";
-        const safeNext =
-            nextParam.startsWith("/") && allowedRoutes.includes(nextParam) ? nextParam : "";
-
-        router.replace(safeNext || firstAllowedRoute || "/");
-    }, [authHeaders, router, searchParams]);
-
     const handleSubmit = useCallback(
         async (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault();
@@ -132,7 +100,7 @@ function LoginScreenContent() {
 
                 toast.success("Login realizado com sucesso!", optionsToast);
 
-                await getPermissionsAndRedirect();
+                router.replace("/kanban");
             } catch (err) {
                 console.error("Erro ao fazer login:", err);
                 toast.error("Usuário ou senha incorretos!", optionsToast);
@@ -146,7 +114,7 @@ function LoginScreenContent() {
             username,
             password,
             optionsToast,
-            getPermissionsAndRedirect,
+            router,
             setSafeLoading,
         ],
     );
@@ -318,4 +286,3 @@ export default function LoginScreen() {
         </Suspense>
     );
 }
-
