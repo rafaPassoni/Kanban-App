@@ -7,11 +7,14 @@ interface MultiSelectDropdownProps {
     items: { id: number; name: string }[];
     selectedIds: number[];
     onChange: (ids: number[]) => void;
+    openUp?: boolean;
 }
 
-export default function MultiSelectDropdown({ label, items, selectedIds, onChange }: MultiSelectDropdownProps) {
+export default function MultiSelectDropdown({ label, items, selectedIds, onChange, openUp = false }: MultiSelectDropdownProps) {
     const [open, setOpen] = useState(false);
+    const [flipUp, setFlipUp] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -21,13 +24,23 @@ export default function MultiSelectDropdown({ label, items, selectedIds, onChang
         return () => document.removeEventListener("mousedown", handler);
     }, []);
 
+    const handleToggle = () => {
+        if (!open && buttonRef.current && !openUp) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            const spaceBelow = window.innerHeight - rect.bottom;
+            setFlipUp(spaceBelow < 220);
+        }
+        setOpen(!open);
+    };
+
     return (
         <div>
             <label className="block text-sm font-medium text-slate-300 mb-1.5">{label}</label>
             <div ref={ref} className="relative">
                 <button
+                    ref={buttonRef}
                     type="button"
-                    onClick={() => setOpen(!open)}
+                    onClick={handleToggle}
                     className="w-full flex items-center justify-between px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
                 >
                     <span className={selectedIds.length > 0 ? "text-white" : "text-slate-400"}>
@@ -39,7 +52,7 @@ export default function MultiSelectDropdown({ label, items, selectedIds, onChang
                 </button>
 
                 {open && (
-                    <div className="absolute z-10 mt-1 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                    <div className={`absolute z-10 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-lg max-h-48 overflow-y-auto ${openUp || flipUp ? "bottom-full mb-1" : "mt-1"}`}>
                         {items.map((item) => {
                             const checked = selectedIds.includes(item.id);
                             return (

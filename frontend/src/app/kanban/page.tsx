@@ -160,7 +160,7 @@ export default function KanbanPage() {
                             {COLUMNS.map((column) => (
                                 <div
                                     key={column.id}
-                                    className="bg-slate-800/50 rounded-xl border border-slate-700/50 flex flex-col h-auto sm:h-[calc(100vh-170px)] flex-1 min-w-full sm:min-w-70 pt-2 px-3 sm:px-4 pb-4"
+                                    className="bg-slate-800/50 rounded-xl border border-slate-700/50 flex flex-col h-auto sm:h-[calc(100dvh-170px)] flex-1 min-w-full sm:min-w-70 pt-2 px-3 sm:px-4 pb-4"
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-2 w-full">
@@ -238,11 +238,11 @@ export default function KanbanPage() {
                                         onDrop={() => handleDrop(column.id)}
                                     >
                                         {columnTasks.length === 0 ? (
-                                            <div className="flex-1 min-h-50 overflow-y-auto pr-1 flex items-center justify-center">
+                                            <div className="flex-1 min-h-24 sm:min-h-50 overflow-y-auto pr-1 flex items-center justify-center">
                                                 <div className="text-center py-8 text-slate-500 text-sm">Nenhuma Task</div>
                                             </div>
                                         ) : (
-                                            <div className="flex-1 min-h-50 overflow-y-auto">
+                                            <div className="flex-1 min-h-24 sm:min-h-50 overflow-y-auto">
                                                 <div className="-space-y-2">
                                                     {columnTasks.map((task) => (
                                                         <div key={task.id}>

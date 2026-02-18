@@ -94,8 +94,8 @@ export default function SubtaskList({ task, perms }: SubtaskListProps) {
                                     draggedSubtask?.subtaskId === subtask.id ? "opacity-70" : "",
                                     dropTargetSubtaskId === subtask.id
                                         ? dropTargetPosition === "after"
-                                            ? "border-blue-400/70 bg-blue-500/10 translate-y-[1px]"
-                                            : "border-blue-400/70 bg-blue-500/10 -translate-y-[1px]"
+                                            ? "border-blue-400/70 bg-blue-500/10 translate-y-px"
+                                            : "border-blue-400/70 bg-blue-500/10 -translate-y-px"
                                         : "",
                                 ].join(" ")}
                             >
@@ -108,7 +108,7 @@ export default function SubtaskList({ task, perms }: SubtaskListProps) {
                                         className="mt-0.5 h-4 w-4 shrink-0 appearance-none rounded-full border border-slate-600 bg-slate-900 cursor-pointer transition-colors checked:border-blue-500 checked:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60"
                                     />
                                     {isEditingThis ? (
-                                        <span className={`flex-1 whitespace-pre-wrap break-words ${subtask.is_done ? "line-through text-slate-400" : "text-slate-100"}`}>
+                                        <span className={`flex-1 whitespace-pre-wrap wrap-break-word ${subtask.is_done ? "line-through text-slate-400" : "text-slate-100"}`}>
                                             <span aria-hidden>- </span>
                                             <span
                                                 ref={editingSubtaskRef}
@@ -145,7 +145,7 @@ export default function SubtaskList({ task, perms }: SubtaskListProps) {
                                             </span>
                                         </span>
                                     ) : (
-                                        <span className={`whitespace-pre-wrap break-words ${subtask.is_done ? "line-through text-slate-400" : "text-slate-100"}`}>
+                                        <span className={`whitespace-pre-wrap wrap-break-word ${subtask.is_done ? "line-through text-slate-400" : "text-slate-100"}`}>
                                             - {subtask.title}
                                         </span>
                                     )}

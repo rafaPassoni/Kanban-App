@@ -32,7 +32,7 @@ export default function ProjetosPage() {
             <main className="mx-auto max-w-7xl px-4 sm:px-6 py-4 sm:py-6">
                 <div className="flex items-center gap-3 mb-6">
                     <FolderOpen className="h-8 w-8 text-blue-400" />
-                    <h1 className="text-2xl font-semibold text-slate-50">Projetos</h1>
+                    <h1 className="text-xl sm:text-2xl font-semibold text-slate-50">Projetos</h1>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2 mb-6">

@@ -126,13 +126,13 @@ export default function KanbanFilterBar({
     );
 
     return (
-        <div className="flex flex-wrap items-center gap-2 ml-auto">
+        <div className="flex flex-wrap items-center gap-2 ml-auto w-full sm:w-auto">
             {/* Filtro Projetos */}
             <div className="flex items-center gap-2 relative">
                 <label className="hidden md:inline text-sm text-slate-300">Projetos:</label>
                 <div
                     ref={projectDropdownRef}
-                    className="group relative min-w-35 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
+                    className="group relative min-w-28 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
                     tabIndex={-1}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") { setIsProjectOpen(false); return; }
@@ -147,7 +147,7 @@ export default function KanbanFilterBar({
                     <button type="button" onClick={() => setIsProjectOpen((prev) => !prev)} className={btnClass} aria-haspopup="listbox" aria-expanded={isProjectOpen}>
                         {filterProject === "all" ? "Todos" : projects.find((p) => String(p.id) === filterProject)?.name || "Todos"}
                     </button>
-                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-300 transition-colors group-hover:text-blue-300">
+                    <span className="dropdown-chevron">
                         <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isProjectOpen ? "rotate-180" : ""}`} />
                     </span>
                     {isProjectOpen && (
@@ -162,11 +162,11 @@ export default function KanbanFilterBar({
             </div>
 
             {/* Filtro Responsáveis */}
-            <div className="flex items-center gap-2 relative ml-1">
+            <div className="flex items-center gap-2 relative sm:ml-1">
                 <label className="hidden md:inline text-sm text-slate-300">Responsáveis:</label>
                 <div
                     ref={assignedDropdownRef}
-                    className="group relative min-w-35 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
+                    className="group relative min-w-28 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
                     tabIndex={-1}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") { setIsAssignedOpen(false); return; }
@@ -181,7 +181,7 @@ export default function KanbanFilterBar({
                     <button type="button" onClick={() => setIsAssignedOpen((prev) => !prev)} className={btnClass} aria-haspopup="listbox" aria-expanded={isAssignedOpen}>
                         {filterAssignedTo === "all" ? "Todos" : collaborators.find((c) => String(c.id) === filterAssignedTo)?.name || "Todos"}
                     </button>
-                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-300 transition-colors group-hover:text-blue-300">
+                    <span className="dropdown-chevron">
                         <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isAssignedOpen ? "rotate-180" : ""}`} />
                     </span>
                     {isAssignedOpen && (
@@ -196,11 +196,11 @@ export default function KanbanFilterBar({
             </div>
 
             {/* Filtro Departamentos */}
-            <div className="flex items-center gap-2 relative ml-1">
+            <div className="flex items-center gap-2 relative sm:ml-1">
                 <label className="hidden md:inline text-sm text-slate-300">Setor:</label>
                 <div
                     ref={departmentDropdownRef}
-                    className="group relative min-w-35 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
+                    className="group relative min-w-28 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
                     tabIndex={-1}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") { setIsDepartmentOpen(false); return; }
@@ -215,7 +215,7 @@ export default function KanbanFilterBar({
                     <button type="button" onClick={() => setIsDepartmentOpen((prev) => !prev)} className={btnClass} aria-haspopup="listbox" aria-expanded={isDepartmentOpen}>
                         {filterDepartment === "all" ? "Todos" : departments.find((d) => String(d.id) === filterDepartment)?.name || "Todos"}
                     </button>
-                    <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-300 transition-colors group-hover:text-blue-300">
+                    <span className="dropdown-chevron">
                         <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isDepartmentOpen ? "rotate-180" : ""}`} />
                     </span>
                     {isDepartmentOpen && (
@@ -229,7 +229,7 @@ export default function KanbanFilterBar({
                 </div>
             </div>
 
-            <div className="flex items-center gap-1.5 ml-1">
+            <div className="flex items-center gap-1.5 sm:ml-1">
                 <a
                     href="/kanban/tv"
                     target="_blank"

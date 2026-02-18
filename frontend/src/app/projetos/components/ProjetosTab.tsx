@@ -96,7 +96,7 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-slate-100">Projetos</h2>
                     {canAdd && (
-                        <button type="button" onClick={() => { setForm({ ...EMPTY_PROJ }); setModal({ type: "add" }); }} className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors cursor-pointer">
+                        <button type="button" onClick={() => { setForm({ ...EMPTY_PROJ }); setModal({ type: "add" }); }} className="btn-add">
                             <Plus className="h-4 w-4" /><span className="hidden sm:inline">Adicionar</span>
                         </button>
                     )}
@@ -128,10 +128,10 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
                                         <td className="px-4 py-3 text-right">
                                             <div className="flex items-center justify-end gap-1">
                                                 {canEdit && (
-                                                    <button type="button" onClick={() => openEdit(p)} className="p-2 rounded-lg text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 transition-colors cursor-pointer" title="Editar"><Pencil className="h-4 w-4" /></button>
+                                                    <button type="button" onClick={() => openEdit(p)} className="p-3 sm:p-2 rounded-lg text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 transition-colors cursor-pointer" title="Editar"><Pencil className="h-4 w-4" /></button>
                                                 )}
                                                 {canDelete && (
-                                                    <button type="button" onClick={() => setModal({ type: "delete", id: p.id!, name: p.name })} className="p-2 rounded-lg text-slate-400 hover:text-red-300 hover:bg-red-500/10 transition-colors cursor-pointer" title="Excluir"><Trash className="h-4 w-4" /></button>
+                                                    <button type="button" onClick={() => setModal({ type: "delete", id: p.id!, name: p.name })} className="p-3 sm:p-2 rounded-lg text-slate-400 hover:text-red-300 hover:bg-red-500/10 transition-colors cursor-pointer" title="Excluir"><Trash className="h-4 w-4" /></button>
                                                 )}
                                             </div>
                                         </td>
@@ -145,7 +145,7 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
 
             {/* Add/Edit Modal */}
             {(modal.type === "add" || modal.type === "edit") && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                <div className="modal-overlay">
                     <div className="w-full max-w-lg rounded-2xl border border-slate-700/80 bg-slate-900 p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
                         <div className="flex items-center justify-between mb-5">
                             <h3 className="text-lg font-semibold text-slate-100">{modal.type === "add" ? "Novo Projeto" : "Editar Projeto"}</h3>
@@ -154,11 +154,11 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-slate-300 mb-1.5">Nome *</label>
-                                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nome do projeto" />
+                                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input-field" placeholder="Nome do projeto" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-300 mb-1.5">Descrição</label>
-                                <textarea value={form.description || ""} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="Descrição do projeto (opcional)" />
+                                <textarea value={form.description || ""} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className="input-field resize-none" placeholder="Descrição do projeto (opcional)" />
                             </div>
                             {responsaveis.length > 0 && (
                                 <MultiSelectDropdown
@@ -166,6 +166,7 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
                                     items={responsaveis.filter((r): r is Responsavel & { id: number } => r.id !== undefined)}
                                     selectedIds={form.responsible_collaborators}
                                     onChange={(ids) => setForm({ ...form, responsible_collaborators: ids })}
+                                    openUp
                                 />
                             )}
                             {setores.length > 0 && (
@@ -174,12 +175,13 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
                                     items={setores.filter((s): s is Setor & { id: number } => s.id !== undefined)}
                                     selectedIds={form.used_by_departments}
                                     onChange={(ids) => setForm({ ...form, used_by_departments: ids })}
+                                    openUp
                                 />
                             )}
                         </div>
                         <div className="flex justify-end gap-3 mt-6">
-                            <button type="button" onClick={() => setModal({ type: null })} className="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors cursor-pointer">Cancelar</button>
-                            <button type="button" onClick={save} className="px-4 py-2 rounded-xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 transition-colors cursor-pointer">{modal.type === "add" ? "Criar" : "Salvar"}</button>
+                            <button type="button" onClick={() => setModal({ type: null })} className="btn-cancel">Cancelar</button>
+                            <button type="button" onClick={save} className="btn-primary">{modal.type === "add" ? "Criar" : "Salvar"}</button>
                         </div>
                     </div>
                 </div>

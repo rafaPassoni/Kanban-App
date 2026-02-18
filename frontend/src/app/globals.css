@@ -10,6 +10,19 @@
     --color-foreground: var(--foreground);
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
+
+    /* Sizing customizado do projeto */
+    --spacing-28: 7rem;
+    --spacing-30: 7.5rem;
+    --spacing-35: 8.75rem;
+    --spacing-45: 11.25rem;
+    --spacing-55: 13.75rem;
+    --spacing-65: 16.25rem;
+    --spacing-70: 17.5rem;
+    --spacing-100: 25rem;
+
+    /* Container extra-largo */
+    --container-8xl: 96rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,6 +65,39 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     scrollbar-width: thin;
     scrollbar-color: #475569 #0f172a;
 }
+/* Touch devices: scrollbar mais fina */
+@media (hover: none) {
+    *::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+/* Classes utilitarias reutilizaveis */
+.input-field {
+    @apply w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+.modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4;
+}
+
+.btn-cancel {
+    @apply px-4 py-2 rounded-xl text-sm font-medium text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors cursor-pointer;
+}
+
+.btn-primary {
+    @apply px-4 py-2 rounded-xl text-sm font-medium text-white bg-blue-600 hover:bg-blue-500 transition-colors cursor-pointer;
+}
+
+.btn-add {
+    @apply flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors cursor-pointer;
+}
+
+.dropdown-chevron {
+    @apply pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-300 transition-colors group-hover:text-blue-300;
+}
+
 /* Oculta o indicador de dev do Next.js */
 #__next-build-watcher {
   display: none !important;

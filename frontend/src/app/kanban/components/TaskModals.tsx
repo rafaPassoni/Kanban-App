@@ -211,7 +211,7 @@ export default function TaskModals({
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-300 mb-1.5">Projeto:</label>
-                                    <select value={formData.project ?? ""} onChange={(e) => setFormData((prev) => ({ ...prev, project: e.target.value ? Number(e.target.value) : null }))} className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <select value={formData.project ?? ""} onChange={(e) => setFormData((prev) => ({ ...prev, project: e.target.value ? Number(e.target.value) : null }))} className="input-field">
                                         <option value="">Nenhum</option>
                                         {projects.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
                                     </select>
@@ -222,7 +222,7 @@ export default function TaskModals({
                                         <button type="button" onClick={() => setIsAddPriorityOpen((prev) => !prev)} aria-haspopup="listbox" aria-expanded={isAddPriorityOpen} className={dropdownBtnClass}>
                                             {PRIORITY_LABELS[formData.priority]}
                                         </button>
-                                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-300 transition-colors group-hover:text-blue-300">
+                                        <span className="dropdown-chevron">
                                             <ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isAddPriorityOpen ? "rotate-180" : ""}`} />
                                         </span>
                                         {isAddPriorityOpen && (
@@ -286,7 +286,7 @@ export default function TaskModals({
                                         <button type="button" onClick={() => setIsEditStatusOpen((prev) => !prev)} aria-haspopup="listbox" aria-expanded={isEditStatusOpen} className={dropdownBtnClass}>
                                             {STATUS_LABELS[editForm.status]}
                                         </button>
-                                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-300 transition-colors group-hover:text-blue-300"><ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isEditStatusOpen ? "rotate-180" : ""}`} /></span>
+                                        <span className="dropdown-chevron"><ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isEditStatusOpen ? "rotate-180" : ""}`} /></span>
                                         {isEditStatusOpen && (
                                             <div className={dropdownListClass}>
                                                 <ul className="max-h-60 overflow-y-auto py-1" role="listbox">
@@ -304,7 +304,7 @@ export default function TaskModals({
                                         <button type="button" onClick={() => setIsEditPriorityOpen((prev) => !prev)} aria-haspopup="listbox" aria-expanded={isEditPriorityOpen} className={dropdownBtnClass}>
                                             {PRIORITY_LABELS[editForm.priority]}
                                         </button>
-                                        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-300 transition-colors group-hover:text-blue-300"><ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isEditPriorityOpen ? "rotate-180" : ""}`} /></span>
+                                        <span className="dropdown-chevron"><ChevronDown className={`h-4 w-4 transition-transform duration-150 ${isEditPriorityOpen ? "rotate-180" : ""}`} /></span>
                                         {isEditPriorityOpen && (
                                             <div className={dropdownListClass}>
                                                 <ul className="max-h-60 overflow-y-auto py-1" role="listbox">
@@ -319,7 +319,7 @@ export default function TaskModals({
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-300 mb-1.5">Projeto:</label>
-                                <select value={editForm.project ?? ""} onChange={(e) => setEditForm((prev) => ({ ...prev, project: e.target.value ? Number(e.target.value) : null }))} className="w-full px-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <select value={editForm.project ?? ""} onChange={(e) => setEditForm((prev) => ({ ...prev, project: e.target.value ? Number(e.target.value) : null }))} className="input-field">
                                     <option value="">Nenhum</option>
                                     {projects.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
                                 </select>

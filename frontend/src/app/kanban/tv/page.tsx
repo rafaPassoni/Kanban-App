@@ -331,28 +331,41 @@ export default function KanbanTVPage() {
 
                                                 {/* Task Body */}
                                                 <div className={styles.taskBody}>
-                                                    {/* Assigned To */}
-                                                    {task.assigned_to_names && task.assigned_to_names.length > 0 && (
+                                                    {/* Responsável */}
+                                                    {task.responsavel_name && (
                                                         <div className={styles.assignedRow}>
                                                             <div className={styles.assignedIcon}>
                                                                 <User className={styles.iconSmBlue} />
                                                             </div>
                                                             <div className={styles.assignedInfo}>
                                                                 <p className={styles.assignedName}>
-                                                                    {task.assigned_to_names.join(", ")}
+                                                                    {task.responsavel_name}
                                                                 </p>
                                                             </div>
                                                         </div>
                                                     )}
 
-                                                    {/* Responsáveis */}
-                                                    {task.assigned_to_names && task.assigned_to_names.length > 0 && (
-                                                        <div className={styles.metaRow}>
-                                                            <User className={styles.iconXs} />
-                                                            <span className={styles.metaText}>{task.assigned_to_names.join(", ")}</span>
+                                                    {/* Atribuídos (excluindo o responsável para não duplicar) */}
+                                                    {task.assigned_to_names && task.assigned_to_names.filter(n => n !== task.responsavel_name).length > 0 && (
+                                                        <div className={styles.assignedRow}>
+                                                            <div className={styles.assignedIcon}>
+                                                                <User className={styles.iconSmBlue} />
+                                                            </div>
+                                                            <div className={styles.assignedInfo}>
+                                                                <p className={styles.assignedName}>
+                                                                    {task.assigned_to_names.filter(n => n !== task.responsavel_name).join(", ")}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     )}
 
+                                                    {/* Projeto */}
+                                                    {task.project_name && (
+                                                        <div className={styles.metaRow}>
+                                                            <Briefcase className={styles.iconXs} />
+                                                            <span className={styles.metaText}>{task.project_name}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         );

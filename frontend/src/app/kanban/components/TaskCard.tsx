@@ -55,7 +55,7 @@ export default function TaskCard({
 
     return (
         <div className="pb-3">
-            <div className="bg-gradient-to-br from-slate-900 to-slate-900/80 border border-slate-700 rounded-xl overflow-hidden hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 transition-all group">
+            <div className="bg-linear-to-br from-slate-900 to-slate-900/80 border border-slate-700 rounded-xl overflow-hidden hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 transition-all group">
                 {/* Header */}
                 <div
                     draggable={perms.canChange}
@@ -73,7 +73,7 @@ export default function TaskCard({
                                 >
                                     {task.title}
                                 </h3>
-                                <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 w-max max-w-70 sm:max-w-80 opacity-0 transition-opacity duration-150 group-hover/title:opacity-100">
+                                <div className="pointer-events-none absolute left-0 top-full z-20 mt-2 w-max max-w-[calc(100vw-3rem)] sm:max-w-80 opacity-0 transition-opacity duration-150 group-hover/title:opacity-100">
                                     <div className="rounded-lg border border-slate-700/80 bg-slate-950/95 px-3 py-2 text-xs text-slate-100 shadow-xl">
                                         {task.title}
                                     </div>
@@ -110,7 +110,7 @@ export default function TaskCard({
                             </div>
 
                             {task.assigned_to_names && task.assigned_to_names.length > 0 && (
-                                <div className="mt-2 inline-flex items-center gap-1.5 text-xs text-slate-200 bg-slate-900/30 px-2 py-1 rounded-md border border-slate-700/60 max-w-[220px]">
+                                <div className="mt-2 inline-flex items-center gap-1.5 text-xs text-slate-200 bg-slate-900/30 px-2 py-1 rounded-md border border-slate-700/60 max-w-55">
                                     <User className="h-3.5 w-3.5 text-blue-400" />
                                     <span className="truncate font-medium">{task.assigned_to_names.join(", ")}</span>
                                 </div>
@@ -120,7 +120,7 @@ export default function TaskCard({
                             {perms.canChange && (
                                 <button
                                     onClick={(e) => { e.stopPropagation(); onEdit(); }}
-                                    className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-slate-300 hover:text-blue-300 cursor-pointer"
+                                    className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-slate-300 hover:text-blue-300 cursor-pointer p-2"
                                     title="Editar Task"
                                 >
                                     <Pencil className="h-4 w-4" />
@@ -129,7 +129,7 @@ export default function TaskCard({
                             {perms.canDelete && (
                                 <button
                                     onClick={(e) => { e.stopPropagation(); onDelete(); }}
-                                    className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-300 p-1 cursor-pointer"
+                                    className="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-300 p-2 cursor-pointer"
                                 >
                                     <Trash className="h-4 w-4" />
                                 </button>
@@ -169,7 +169,7 @@ export default function TaskCard({
                         {/* Responsáveis e Setores */}
                         <div className="space-y-2 -mt-1">
                             {assignedNames.length > 0 && (
-                                <div className="flex items-center gap-2 bg-gradient-to-r from-blue-900/20 to-transparent px-3 py-2 rounded-lg border border-blue-700/30">
+                                <div className="flex items-center gap-2 bg-linear-to-r from-blue-900/20 to-transparent px-3 py-2 rounded-lg border border-blue-700/30">
                                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-900/50 border border-blue-600/50">
                                         <User className="h-4 w-4 text-blue-300" />
                                     </div>
@@ -180,7 +180,7 @@ export default function TaskCard({
                                 </div>
                             )}
                             {deptNames.length > 0 && (
-                                <div className="flex items-center gap-2 bg-gradient-to-r from-emerald-900/20 to-transparent px-3 py-2 rounded-lg border border-emerald-700/30">
+                                <div className="flex items-center gap-2 bg-linear-to-r from-emerald-900/20 to-transparent px-3 py-2 rounded-lg border border-emerald-700/30">
                                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-900/50 border border-emerald-600/50">
                                         <Building2 className="h-4 w-4 text-emerald-300" />
                                     </div>

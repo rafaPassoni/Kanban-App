@@ -37,7 +37,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 class PublicTaskViewSet(viewsets.ReadOnlyModelViewSet):
     """Versao publica (somente leitura) com campos restritos."""
-    queryset = Task.objects.select_related('project', 'responsavel').order_by('order', '-id')
+    queryset = Task.objects.select_related('project', 'responsavel').prefetch_related('assigned_to').order_by('order', '-id')
     serializer_class = PublicTaskSerializer
     permission_classes = [AllowAny]
 

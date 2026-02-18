@@ -71,11 +71,15 @@ class PublicTaskSerializer(serializers.ModelSerializer):
     """Versao publica com campos restritos — sem dados sensiveis."""
     project_name = serializers.CharField(source='project.name', read_only=True, allow_null=True, default=None)
     responsavel_name = serializers.CharField(source='responsavel.name', read_only=True, allow_null=True, default=None)
+    assigned_to_names = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
         fields = (
             'id', 'title', 'status', 'priority', 'order',
             'deadline', 'completed_at',
-            'project_name', 'responsavel_name',
+            'project_name', 'responsavel_name', 'assigned_to_names',
         )
+
+    def get_assigned_to_names(self, obj):
+        return [c.name for c in obj.assigned_to.all()]

@@ -133,7 +133,7 @@ export default function NavHoverIcons() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-300 transition-colors hover:bg-slate-800 hover:text-blue-300 lg:hidden cursor-pointer"
+              className="flex h-11 w-11 items-center justify-center rounded-xl text-slate-300 transition-colors hover:bg-slate-800 hover:text-blue-300 lg:hidden cursor-pointer"
               aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
               aria-expanded={mobileMenuOpen}
             >
@@ -191,7 +191,7 @@ export default function NavHoverIcons() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(false)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200 cursor-pointer"
+            className="flex h-11 w-11 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200 cursor-pointer"
             aria-label="Fechar menu"
           >
             <X className="h-5 w-5" />
