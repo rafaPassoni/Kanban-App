@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Plus, Pencil, Trash, X } from "lucide-react";
+import { Plus, Pencil, Trash, Eye, X } from "lucide-react";
 import { API_PROJECTS, API_COLLABORATORS, API_DEPARTMENTS } from "@/constants/api";
 import { extractResults } from "@/lib/api";
 import type { Projeto, Responsavel, Setor, ModalProj } from "../types";
@@ -122,11 +122,21 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
                                 {projetos.map((p) => (
                                     <tr key={p.id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
                                         <td className="px-4 py-3 text-slate-200 font-medium">{p.name}</td>
-                                        <td className="px-4 py-3 text-slate-400 hidden sm:table-cell">{p.description || "\u2014"}</td>
+                                        <td className="px-4 py-3 text-slate-400 hidden sm:table-cell max-w-md">
+                                            <div className="flex items-start gap-2">
+                                                <span className="line-clamp-2 flex-1">{p.description || "\u2014"}</span>
+                                                {p.description && (
+                                                    <button type="button" onClick={() => setModal({ type: "view", name: p.name, description: p.description || "" })} className="shrink-0 p-1 rounded-lg text-slate-500 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors cursor-pointer" title="Ver descrição completa"><Eye className="h-3.5 w-3.5" /></button>
+                                                )}
+                                            </div>
+                                        </td>
                                         <td className="px-4 py-3 text-slate-400 hidden md:table-cell">{p.responsible_collaborators_names?.join(", ") || "\u2014"}</td>
                                         <td className="px-4 py-3 text-slate-400 hidden md:table-cell">{p.used_by_departments_names?.join(", ") || "\u2014"}</td>
                                         <td className="px-4 py-3 text-right">
                                             <div className="flex items-center justify-end gap-1">
+                                                {p.description && (
+                                                    <button type="button" onClick={() => setModal({ type: "view", name: p.name, description: p.description || "" })} className="sm:hidden p-3 rounded-lg text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors cursor-pointer" title="Ver descrição"><Eye className="h-4 w-4" /></button>
+                                                )}
                                                 {canEdit && (
                                                     <button type="button" onClick={() => openEdit(p)} className="p-3 sm:p-2 rounded-lg text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 transition-colors cursor-pointer" title="Editar"><Pencil className="h-4 w-4" /></button>
                                                 )}
@@ -182,6 +192,22 @@ export default function ProjetosTab({ authedFetch, canAdd, canEdit, canDelete }:
                         <div className="flex justify-end gap-3 mt-6">
                             <button type="button" onClick={() => setModal({ type: null })} className="btn-cancel">Cancelar</button>
                             <button type="button" onClick={save} className="btn-primary">{modal.type === "add" ? "Criar" : "Salvar"}</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* View Modal */}
+            {modal.type === "view" && (
+                <div className="modal-overlay">
+                    <div className="w-full max-w-lg rounded-2xl border border-slate-700/80 bg-slate-900 p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+                        <div className="flex items-center justify-between mb-5">
+                            <h3 className="text-lg font-semibold text-slate-100">{modal.name}</h3>
+                            <button type="button" onClick={() => setModal({ type: null })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"><X className="h-5 w-5" /></button>
+                        </div>
+                        <p className="text-sm text-slate-300 whitespace-pre-wrap">{modal.description || "Sem descrição."}</p>
+                        <div className="flex justify-end mt-6">
+                            <button type="button" onClick={() => setModal({ type: null })} className="btn-cancel">Fechar</button>
                         </div>
                     </div>
                 </div>

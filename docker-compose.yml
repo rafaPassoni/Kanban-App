@@ -3,6 +3,7 @@ services:
         build:
             context: ./backend
         container_name: kanban_app_backend
+        user: root
         command: >
             sh -c "python manage.py migrate &&
                    gunicorn -c gunicorn.conf.py app.wsgi:application"
@@ -20,7 +21,9 @@ services:
     frontend:
       build:
         context: ./frontend
+        target: deps
       container_name: kanban_app_frontend
+      command: npm run dev
       ports:
         - "3022:3000"
       volumes:
@@ -32,7 +35,7 @@ services:
       stdin_open: true
       tty: true
       healthcheck:
-        test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+        test: ["CMD-SHELL", "wget -qO- http://localhost:3000/ || exit 1"]
         interval: 30s
         timeout: 10s
         retries: 3

@@ -30,19 +30,22 @@ export type ModalResp =
     | { type: null }
     | { type: "add" }
     | { type: "edit"; id: number }
-    | { type: "delete"; id: number; name?: string };
+    | { type: "delete"; id: number; name?: string }
+    | { type: "view"; name: string; email: string; position: string };
 
 export type ModalProj =
     | { type: null }
     | { type: "add" }
     | { type: "edit"; id: number }
-    | { type: "delete"; id: number; name?: string };
+    | { type: "delete"; id: number; name?: string }
+    | { type: "view"; name: string; description: string };
 
 export type ModalSetor =
     | { type: null }
     | { type: "add" }
     | { type: "edit"; id: number }
-    | { type: "delete"; id: number; name?: string };
+    | { type: "delete"; id: number; name?: string }
+    | { type: "view"; name: string; description: string };
 
 export const EMPTY_RESP: Responsavel = { name: "", email: "", position: "" };
 

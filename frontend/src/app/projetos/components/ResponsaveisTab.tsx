@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Plus, Pencil, Trash, X } from "lucide-react";
+import { Plus, Pencil, Trash, Eye, X } from "lucide-react";
 import { API_COLLABORATORS } from "@/constants/api";
 import { extractResults } from "@/lib/api";
 import type { Responsavel, ModalResp } from "../types";
@@ -99,6 +99,7 @@ export default function ResponsaveisTab({ authedFetch, canAdd, canEdit, canDelet
                                         <td className="px-4 py-3 text-slate-400 hidden sm:table-cell">{r.position || "\u2014"}</td>
                                         <td className="px-4 py-3 text-right">
                                             <div className="flex items-center justify-end gap-1">
+                                                <button type="button" onClick={() => setModal({ type: "view", name: r.name, email: r.email, position: r.position || "" })} className="p-3 sm:p-2 rounded-lg text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors cursor-pointer" title="Ver detalhes"><Eye className="h-4 w-4" /></button>
                                                 {canEdit && (
                                                     <button type="button" onClick={() => { setForm({ name: r.name, email: r.email, position: r.position || "" }); setModal({ type: "edit", id: r.id! }); }} className="p-3 sm:p-2 rounded-lg text-slate-400 hover:text-blue-300 hover:bg-blue-500/10 transition-colors cursor-pointer" title="Editar"><Pencil className="h-4 w-4" /></button>
                                                 )}
@@ -140,6 +141,31 @@ export default function ResponsaveisTab({ authedFetch, canAdd, canEdit, canDelet
                         <div className="flex justify-end gap-3 mt-6">
                             <button type="button" onClick={() => setModal({ type: null })} className="btn-cancel">Cancelar</button>
                             <button type="button" onClick={save} className="btn-primary">{modal.type === "add" ? "Criar" : "Salvar"}</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* View Modal */}
+            {modal.type === "view" && (
+                <div className="modal-overlay">
+                    <div className="w-full max-w-md rounded-2xl border border-slate-700/80 bg-slate-900 p-6 shadow-2xl">
+                        <div className="flex items-center justify-between mb-5">
+                            <h3 className="text-lg font-semibold text-slate-100">{modal.name}</h3>
+                            <button type="button" onClick={() => setModal({ type: null })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"><X className="h-5 w-5" /></button>
+                        </div>
+                        <div className="space-y-3 text-sm">
+                            <div>
+                                <span className="text-slate-500">Email</span>
+                                <p className="text-slate-300">{modal.email}</p>
+                            </div>
+                            <div>
+                                <span className="text-slate-500">Cargo</span>
+                                <p className="text-slate-300">{modal.position || "Não informado"}</p>
+                            </div>
+                        </div>
+                        <div className="flex justify-end mt-6">
+                            <button type="button" onClick={() => setModal({ type: null })} className="btn-cancel">Fechar</button>
                         </div>
                     </div>
                 </div>
