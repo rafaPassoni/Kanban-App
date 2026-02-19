@@ -9,6 +9,7 @@ import { CircleUser, User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import AuthService from "@/services/auth";
 import { API_TOKEN } from "@/constants/api";
+import ErrorBoundary from "@/app/components/ErrorBoundary";
 
 // ====================
 // Componentes
@@ -281,8 +282,10 @@ function LoginScreenContent() {
 // ====================
 export default function LoginScreen() {
     return (
-        <Suspense fallback={null}>
-            <LoginScreenContent />
-        </Suspense>
+        <ErrorBoundary>
+            <Suspense fallback={null}>
+                <LoginScreenContent />
+            </Suspense>
+        </ErrorBoundary>
     );
 }

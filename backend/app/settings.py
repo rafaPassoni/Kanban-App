@@ -10,6 +10,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from decouple import config, Csv
+from django.core.exceptions import ImproperlyConfigured
 
 # Constroi caminhos dentro do projeto como: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,11 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Veja https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ImproperlyConfigured("A variavel de ambiente SECRET_KEY deve ser definida.")
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-raw_hosts = os.getenv("ALLOWED_HOSTS", default="*")
-ALLOWED_HOSTS = ["*"] if raw_hosts.strip() == "*" else [h.strip() for h in raw_hosts.split(",") if h.strip()]
+raw_hosts = os.getenv("ALLOWED_HOSTS", default="")
+ALLOWED_HOSTS = [h.strip() for h in raw_hosts.split(",") if h.strip()] if raw_hosts.strip() else (["*"] if DEBUG else [])
 
 
 # Definicao das aplicacoes
@@ -117,6 +120,7 @@ else:
                 'PASSWORD': os.getenv('DB_PASSWORD', ''),
                 'HOST': os.getenv('DB_HOST', 'db'),
                 'PORT': os.getenv('DB_PORT', '5432'),
+                'CONN_MAX_AGE': 600,
             }
         }
 
@@ -143,7 +147,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 200,
+    "PAGE_SIZE": 50,
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
@@ -225,11 +229,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "handlers": {
-        "console": {"class": "logging.StreamHandler"},
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name} {message}",
+            "style": "{",
+        },
     },
-    "root": {"handlers": ["console"], "level": "WARNING"},
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {"handlers": ["console"], "level": "INFO" if not DEBUG else "DEBUG"},
     "loggers": {
-        "django": {"handlers": ["console"], "level": "WARNING", "propagate": False},
+        "django": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "django.request": {"handlers": ["console"], "level": "WARNING", "propagate": False},
     },
 }

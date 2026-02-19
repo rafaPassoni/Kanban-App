@@ -7,13 +7,17 @@ class ProjectSerializer(serializers.ModelSerializer):
     """Serializa `Project` e expoe nomes legiveis de relacoes M2M."""
     responsible_collaborators_names = serializers.SerializerMethodField()
     used_by_departments_names = serializers.SerializerMethodField()
+    credential_password = serializers.CharField(
+        write_only=True, required=False, allow_blank=True, allow_null=True,
+    )
+    has_credential = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
         fields = (
             'id', 'name', 'description', 'repo_url', 'admin_url', 'ports',
             'status', 'is_online', 'credential_user', 'credential_password',
-            'readme', 'doc_changed_at',
+            'has_credential', 'readme', 'doc_changed_at',
             'responsible_collaborators', 'used_by_departments',
             'created_at', 'updated_at',
             'responsible_collaborators_names', 'used_by_departments_names',
@@ -26,6 +30,10 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_used_by_departments_names(self, obj):
         """Retorna nomes de departamentos para filtros e busca textual."""
         return [d.name for d in obj.used_by_departments.all()]
+
+    def get_has_credential(self, obj):
+        """Indica se o projeto tem credencial cadastrada sem expor a senha."""
+        return bool(obj.credential_password)
 
     def to_internal_value(self, data):
         """Normaliza `is_online` quando chega como string em formularios."""

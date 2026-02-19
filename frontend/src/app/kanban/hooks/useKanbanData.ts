@@ -24,17 +24,19 @@ export function useKanbanData() {
             if (!options?.silent) {
                 setLoading(true);
             }
-            const [tasksRes, projectsRes, collabRes, deptRes] = await Promise.all([
+            const [tasksResult, projectsResult, collabResult, deptResult] = await Promise.allSettled([
                 authedFetch(`${API_TASKS}/`),
                 authedFetch(`${API_PROJECTS}/`),
                 authedFetch(`${API_COLLABORATORS}/`),
                 authedFetch(`${API_DEPARTMENTS}/`)
             ]);
-            if (!tasksRes.ok) throw new Error(`Erro ao buscar tasks: ${tasksRes.status}`);
-            const tasksData = await tasksRes.json();
-            const projectsData = projectsRes.ok ? await projectsRes.json() : [];
-            const collabData = collabRes.ok ? await collabRes.json() : [];
-            const deptData = deptRes.ok ? await deptRes.json() : [];
+            if (tasksResult.status === "rejected" || !tasksResult.value.ok) {
+                throw new Error("Erro ao buscar tasks");
+            }
+            const tasksData = await tasksResult.value.json();
+            const projectsData = projectsResult.status === "fulfilled" && projectsResult.value.ok ? await projectsResult.value.json() : [];
+            const collabData = collabResult.status === "fulfilled" && collabResult.value.ok ? await collabResult.value.json() : [];
+            const deptData = deptResult.status === "fulfilled" && deptResult.value.ok ? await deptResult.value.json() : [];
             setTasks(extractResults<Task>(tasksData));
             setProjects(extractResults<Project>(projectsData));
             setCollaborators(extractResults<Collaborator>(collabData));
@@ -111,7 +113,9 @@ export function useKanbanData() {
     );
 
     useEffect(() => {
-        fetchData();
+        let cancelled = false;
+        fetchData().finally(() => { if (cancelled) return; });
+        return () => { cancelled = true; };
     }, [fetchData]);
 
     useEffect(() => {

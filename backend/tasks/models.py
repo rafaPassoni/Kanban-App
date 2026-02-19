@@ -86,6 +86,9 @@ class Task(models.Model):
         verbose_name = "Tarefa"
         verbose_name_plural = "Tarefas"
         ordering = ["order", "-created_at"]
+        indexes = [
+            models.Index(fields=["project", "status", "order"]),
+        ]
 
     def __str__(self):
         return f"{self.title} ({self.get_status_display()})"

@@ -3,7 +3,10 @@
  * Todas as URLs base utilizadas pelo frontend
  */
 
-export const API_BASE = process.env.NEXT_PUBLIC_URL;
+export const API_BASE = process.env.NEXT_PUBLIC_URL ?? "";
+if (!API_BASE && typeof window !== "undefined") {
+    console.warn("[api] NEXT_PUBLIC_URL nao definida — chamadas API podem falhar.");
+}
 
 // Autenticação
 export const API_TOKEN = `${API_BASE}/api/token/`;

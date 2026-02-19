@@ -107,7 +107,7 @@ export default function KanbanFilterBar({
         [],
     );
 
-    const btnClass = "peer w-full rounded-xl border border-slate-700/80 bg-gradient-to-b from-slate-900/95 to-slate-900/80 py-2 pl-3 pr-9 text-left text-sm font-normal text-slate-100 shadow-sm shadow-slate-950/30 transition-all duration-150 cursor-pointer hover:border-blue-500/80 hover:shadow-blue-900/20 focus:outline-none focus:ring-0 focus:border-blue-500/80 focus:shadow-blue-900/20 focus-visible:outline-none focus-visible:ring-0";
+    const btnClass = "peer w-full truncate rounded-xl border border-slate-700/80 bg-gradient-to-b from-slate-900/95 to-slate-900/80 py-2.5 pl-3 pr-9 text-left text-sm font-normal text-slate-100 shadow-sm shadow-slate-950/30 transition-all duration-150 cursor-pointer hover:border-blue-500/80 hover:shadow-blue-900/20 focus:outline-none focus:ring-0 focus:border-blue-500/80 focus:shadow-blue-900/20 focus-visible:outline-none focus-visible:ring-0";
     const dropdownClass = "absolute z-30 mt-0.5 w-full overflow-hidden rounded-xl border border-slate-600/90 bg-slate-900/95 shadow-xl shadow-black/40 backdrop-blur-sm";
 
     const renderOption = (value: string, label: string, currentFilter: string, setFilter: (v: string) => void, setOpen: (v: boolean) => void) => (
@@ -126,13 +126,13 @@ export default function KanbanFilterBar({
     );
 
     return (
-        <div className="flex flex-wrap items-center gap-2 ml-auto w-full sm:w-auto">
+        <div className="grid grid-cols-3 gap-x-2 gap-y-3 w-full lg:flex lg:flex-wrap lg:items-center lg:gap-2 lg:w-auto lg:ml-auto">
             {/* Filtro Projetos */}
-            <div className="flex items-center gap-2 relative">
-                <label className="hidden md:inline text-sm text-slate-300">Projetos:</label>
+            <div className="flex items-center gap-2 relative min-w-0">
+                <label className="hidden lg:inline text-sm text-slate-300 shrink-0">Projetos:</label>
                 <div
                     ref={projectDropdownRef}
-                    className="group relative min-w-28 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
+                    className="group relative w-full lg:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
                     tabIndex={-1}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") { setIsProjectOpen(false); return; }
@@ -162,11 +162,11 @@ export default function KanbanFilterBar({
             </div>
 
             {/* Filtro Responsáveis */}
-            <div className="flex items-center gap-2 relative sm:ml-1">
-                <label className="hidden md:inline text-sm text-slate-300">Responsáveis:</label>
+            <div className="flex items-center gap-2 relative min-w-0 lg:ml-1">
+                <label className="hidden lg:inline text-sm text-slate-300 shrink-0">Responsáveis:</label>
                 <div
                     ref={assignedDropdownRef}
-                    className="group relative min-w-28 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
+                    className="group relative w-full lg:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
                     tabIndex={-1}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") { setIsAssignedOpen(false); return; }
@@ -196,11 +196,11 @@ export default function KanbanFilterBar({
             </div>
 
             {/* Filtro Departamentos */}
-            <div className="flex items-center gap-2 relative sm:ml-1">
-                <label className="hidden md:inline text-sm text-slate-300">Setor:</label>
+            <div className="flex items-center gap-2 relative min-w-0 lg:ml-1">
+                <label className="hidden lg:inline text-sm text-slate-300 shrink-0">Setor:</label>
                 <div
                     ref={departmentDropdownRef}
-                    className="group relative min-w-28 sm:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
+                    className="group relative w-full lg:min-w-45 outline-none focus:outline-none focus-visible:outline-none"
                     tabIndex={-1}
                     onKeyDown={(event) => {
                         if (event.key === "Enter") { setIsDepartmentOpen(false); return; }
@@ -229,12 +229,12 @@ export default function KanbanFilterBar({
                 </div>
             </div>
 
-            <div className="flex items-center gap-1.5 sm:ml-1">
+            <div className="col-span-3 flex items-center gap-2 lg:col-span-1 lg:ml-1">
                 <a
                     href="/kanban/tv"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-purple-500/70 bg-purple-600 hover:bg-purple-700 text-[15px] font-medium text-white cursor-pointer shadow-sm shadow-purple-900/40 transition-colors"
+                    className="inline-flex flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-purple-500/70 bg-purple-600 hover:bg-purple-700 text-[15px] font-medium text-white cursor-pointer shadow-sm shadow-purple-900/40 transition-colors"
                     title="Abrir versão para TV"
                 >
                     <Tv className="h-5.5 w-5.5" />
@@ -242,10 +242,10 @@ export default function KanbanFilterBar({
                 {canAdd && (
                     <button
                         onClick={onAddTask}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-500/70 bg-blue-600 hover:bg-blue-700 text-[15px] font-medium text-white cursor-pointer shadow-sm shadow-blue-900/40 transition-colors"
+                        className="inline-flex flex-1 lg:flex-none items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-blue-500/70 bg-blue-600 hover:bg-blue-700 text-[15px] font-medium text-white cursor-pointer shadow-sm shadow-blue-900/40 transition-colors"
                     >
                         <Plus className="h-4 w-4" />
-                        <span className="hidden sm:inline">Nova Task</span>
+                        <span className="hidden lg:inline">Nova Task</span>
                     </button>
                 )}
             </div>

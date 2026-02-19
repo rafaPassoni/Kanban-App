@@ -198,7 +198,7 @@ export default function KanbanPage() {
             <div className="min-h-[calc(100dvh-120px)] overflow-hidden text-slate-100 px-4 pb-4 pt-0">
                 <div className="w-full max-w-8xl mx-auto">
                     {/* Header */}
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 mb-6">
                         <div className="flex items-center gap-3">
                             <KanbanFill className="h-8 w-8 text-emerald-400" />
                             <div className="flex flex-col">
@@ -223,7 +223,7 @@ export default function KanbanPage() {
                     {/* Kanban Board */}
                     <ErrorBoundary>
                     <SubtaskProvider value={subtaskHook}>
-                        <div className="-mt-5 flex flex-col sm:flex-row sm:flex-wrap gap-4">
+                        <div className="-mt-2 lg:-mt-5 flex flex-col sm:flex-row sm:flex-wrap gap-4">
                             {COLUMNS.map((column) => {
                                 const columnTasks = getTasksByStatus(column.id);
                                 const isCollapsed = collapsedColumns.has(column.id);

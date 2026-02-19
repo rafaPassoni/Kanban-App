@@ -117,6 +117,19 @@ export default function TaskModals({
     const dropdownBtnClass = "peer w-full rounded-xl border border-slate-700/80 bg-gradient-to-b from-slate-900/95 to-slate-900/80 py-2.5 pl-3 pr-10 text-left text-sm font-normal text-slate-100 shadow-sm shadow-slate-950/30 transition-all duration-150 cursor-pointer hover:border-blue-500/80 hover:shadow-blue-900/20 focus:outline-none focus:ring-0 focus:border-blue-500/80 focus:shadow-blue-900/20";
     const dropdownListClass = "absolute z-30 mt-0.5 w-full overflow-hidden rounded-xl border border-slate-600/90 bg-slate-900/95 shadow-xl shadow-black/40 backdrop-blur-sm";
 
+    const accentStyles: Record<string, { available: string; selected: string; container: string }> = {
+        blue: {
+            available: "hover:border-blue-500",
+            selected: "bg-blue-900/40 border-blue-600/60 text-blue-200 hover:bg-blue-800/50 hover:border-blue-500",
+            container: "border-blue-600/50",
+        },
+        emerald: {
+            available: "hover:border-emerald-500",
+            selected: "bg-emerald-900/40 border-emerald-600/60 text-emerald-200 hover:bg-emerald-800/50 hover:border-emerald-500",
+            container: "border-emerald-600/50",
+        },
+    };
+
     const renderDragDropList = (
         items: { id: number; name: string }[],
         selectedIds: number[],
@@ -124,12 +137,14 @@ export default function TaskModals({
         dataKey: string,
         fieldName: "assigned_to" | "department",
         accentColor: string,
-    ) => (
+    ) => {
+        const styles = accentStyles[accentColor] || accentStyles.blue;
+        return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
                 <p className="text-xs text-slate-400 mb-1.5">Disponíveis:</p>
                 <div
-                    className="bg-slate-900 border border-slate-700 rounded-lg p-2 min-h-[60px] max-h-[80px] overflow-y-auto"
+                    className="bg-slate-900 border border-slate-700 rounded-lg p-2 min-h-15 max-h-20 overflow-y-auto"
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => {
                         e.preventDefault();
@@ -142,7 +157,7 @@ export default function TaskModals({
                             key={i.id}
                             draggable
                             onDragStart={(e) => e.dataTransfer.setData(dataKey, String(i.id))}
-                            className={`px-2 py-1.5 mb-1.5 bg-slate-800 border border-slate-600 rounded text-xs text-slate-200 cursor-move hover:bg-slate-700 hover:border-${accentColor}-500 transition-colors`}
+                            className={`px-2 py-1.5 mb-1.5 bg-slate-800 border border-slate-600 rounded text-xs text-slate-200 cursor-move hover:bg-slate-700 ${styles.available} transition-colors`}
                         >
                             {i.name}
                         </div>
@@ -155,7 +170,7 @@ export default function TaskModals({
             <div>
                 <p className="text-xs text-slate-400 mb-1.5">Selecionados:</p>
                 <div
-                    className={`bg-slate-900 border border-${accentColor}-600/50 rounded-lg p-2 min-h-[60px] max-h-[80px] overflow-y-auto`}
+                    className={`bg-slate-900 border ${styles.container} rounded-lg p-2 min-h-15 max-h-20 overflow-y-auto`}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => {
                         e.preventDefault();
@@ -174,7 +189,7 @@ export default function TaskModals({
                                 key={item.id}
                                 draggable
                                 onDragStart={(e) => e.dataTransfer.setData(dataKey, String(item.id))}
-                                className={`px-2 py-1.5 mb-1.5 bg-${accentColor}-900/40 border border-${accentColor}-600/60 rounded text-xs text-${accentColor}-200 cursor-move hover:bg-${accentColor}-800/50 hover:border-${accentColor}-500 transition-colors`}
+                                className={`px-2 py-1.5 mb-1.5 border rounded text-xs cursor-move ${styles.selected} transition-colors`}
                             >
                                 {item.name}
                             </div>
@@ -187,6 +202,7 @@ export default function TaskModals({
             </div>
         </div>
     );
+    };
 
     return (
         <>
@@ -345,7 +361,7 @@ export default function TaskModals({
             {/* Modal: excluir task */}
             {modal.type === "delete" && (
                 <div className="fixed inset-0 bg-black/10 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setModal({ type: null })}>
-                    <div onClick={(e) => e.stopPropagation()} className="bg-slate-900/90 rounded-2xl p-6 w-full max-w-lg border border-slate-700/80 shadow-xl shadow-slate-950/60">
+                    <div onClick={(e) => e.stopPropagation()} className="bg-slate-900/90 rounded-2xl p-4 sm:p-6 w-full max-w-lg border border-slate-700/80 shadow-xl shadow-slate-950/60">
                         <div className="flex items-center justify-between gap-4 border-b border-slate-700/70 pb-2 mb-2">
                             <div className="flex flex-col">
                                 <span className="text-xs uppercase tracking-wide text-red-400">Excluir task</span>
@@ -366,7 +382,7 @@ export default function TaskModals({
             {/* Modal: reabrir task */}
             {reopenModal.open && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setReopenModal({ open: false, taskId: null, nextStatus: null })}>
-                    <div onClick={(e) => e.stopPropagation()} className="bg-slate-900/95 rounded-2xl p-6 w-full max-w-md border border-slate-700/80 shadow-xl">
+                    <div onClick={(e) => e.stopPropagation()} className="bg-slate-900/95 rounded-2xl p-4 sm:p-6 w-full max-w-md border border-slate-700/80 shadow-xl">
                         <div className="mb-4 flex items-start justify-between gap-4">
                             <div className="flex flex-col">
                                 <span className="text-xs uppercase tracking-wide text-slate-400">Reabrir Task</span>
