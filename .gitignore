@@ -51,3 +51,7 @@ backend/mediafiles/
 
 # Logs
 *.log
+
+# Gunicorn runtime
+*.ctl
+*.pid
