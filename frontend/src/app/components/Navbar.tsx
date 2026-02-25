@@ -75,7 +75,7 @@ export default function NavHoverIcons() {
                 className="h-full w-full object-contain"
                 src={logo}
                 alt="Logo"
-                unoptimized
+
                 priority
               />
             </div>
@@ -183,7 +183,7 @@ export default function NavHoverIcons() {
                 className="h-full w-full object-contain"
                 src={logo}
                 alt="Logo"
-                unoptimized
+
               />
             </div>
             <span className="text-sm font-semibold text-slate-50">Menu</span>

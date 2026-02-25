@@ -1,14 +1,11 @@
 "use client";
 
-import axios from "axios";
-import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { Suspense, useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { CircleUser, User, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import AuthService from "@/services/auth";
-import { API_TOKEN } from "@/constants/api";
 import ErrorBoundary from "@/app/components/ErrorBoundary";
 
 // ====================
@@ -47,11 +44,6 @@ function LoginScreenContent() {
         [],
     );
 
-    useEffect(() => {
-        Cookies.remove("accessToken", { path: "/" });
-        Cookies.remove("refreshToken", { path: "/" });
-    }, []);
-
     const setSafeLoading = useCallback((v: boolean) => {
         if (!isMountedRef.current) return;
         setLoading(v);
@@ -89,15 +81,7 @@ function LoginScreenContent() {
             setSafeLoading(true);
 
             try {
-                const response = await axios.post(API_TOKEN, {
-                    username: username.trim(),
-                    password,
-                });
-
-                const { access, refresh } = response.data as { access: string; refresh: string };
-
-                AuthService.setAccessToken(access);
-                AuthService.setRefreshToken(refresh);
+                await AuthService.login(username.trim(), password);
 
                 toast.success("Login realizado com sucesso!", optionsToast);
 
@@ -147,7 +131,6 @@ function LoginScreenContent() {
                                 src="https://raw.githubusercontent.com/Chiaperini-TI/Chiaperini-TI/main/chiaperini-dev-mobile.webp"
                                 alt="Chiaperini TI"
                                 className="h-20 w-auto rounded-md sm:h-28"
-                                unoptimized
                                 priority
                             />
                         </div>

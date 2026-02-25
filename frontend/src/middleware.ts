@@ -1,5 +1,4 @@
 import { NextResponse, type MiddlewareConfig, type NextRequest } from "next/server";
-import { isJwtExpired } from "@/lib/jwt";
 
 // Rotas publicas que nao exigem sessao ativa.
 const publicRoutes = [
@@ -12,9 +11,14 @@ const publicPrefixes = ["/kanban/tv"] as const;
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/login";
 const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/";
 
-function hasValidSession(accessToken?: string, refreshToken?: string): boolean {
-    if (accessToken && !isJwtExpired(accessToken)) return true;
-    if (refreshToken && !isJwtExpired(refreshToken)) return true;
+/**
+ * Verifica sessao via cookies httpOnly.
+ * O middleware do Next.js roda no servidor e pode ler cookies httpOnly.
+ * Basta checar a presenca: se access_token ou refresh_token existem, sessao potencialmente valida.
+ */
+function hasValidSession(request: NextRequest): boolean {
+    if (request.cookies.has("access_token")) return true;
+    if (request.cookies.has("refresh_token")) return true;
     return false;
 }
 
@@ -24,10 +28,7 @@ export function middleware(request: NextRequest) {
     const publicRoute = publicRoutes.find((route) => route.path === path);
     const isPublicPrefix = publicPrefixes.some((prefix) => path.startsWith(prefix));
 
-    const accessToken = request.cookies.get("accessToken")?.value;
-    const refreshToken = request.cookies.get("refreshToken")?.value;
-
-    const sessionValid = hasValidSession(accessToken, refreshToken);
+    const sessionValid = hasValidSession(request);
 
     if (publicRoute) {
         if (sessionValid && publicRoute.whenAuthenticated === "redirect") {
@@ -48,8 +49,9 @@ export function middleware(request: NextRequest) {
         redirectUrl.searchParams.set("next", `${path}${search}`);
 
         const response = NextResponse.redirect(redirectUrl);
-        response.cookies.delete("accessToken");
-        response.cookies.delete("refreshToken");
+        response.cookies.delete("access_token");
+        response.cookies.delete("refresh_token");
+        response.cookies.delete("is_authenticated");
         return response;
     }
 
@@ -59,4 +61,3 @@ export function middleware(request: NextRequest) {
 export const config: MiddlewareConfig = {
     matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"],
 };
-

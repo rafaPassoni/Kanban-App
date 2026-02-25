@@ -137,11 +137,18 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 }
 
+# Cookies JWT (httpOnly) — tokens transitam via cookie, nao via body/header.
+JWT_COOKIE_ACCESS_NAME = "access_token"
+JWT_COOKIE_REFRESH_NAME = "refresh_token"
+JWT_COOKIE_AUTH_FLAG = "is_authenticated"
+JWT_COOKIE_SAMESITE = "Lax"
+JWT_COOKIE_PATH = "/"
+
 
 # Defaults globais do DRF: JWT + exigir autenticacao por padrao.
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "authentication.cookie_auth.CookieJWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",

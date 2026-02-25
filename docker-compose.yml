@@ -3,7 +3,6 @@ services:
         build:
             context: ./backend
         container_name: kanban_app_backend
-        user: root
         command: >
             sh -c "python manage.py migrate &&
                    gunicorn -c gunicorn.conf.py app.wsgi:application"
@@ -16,6 +15,12 @@ services:
         depends_on:
             db:
                 condition: service_healthy
+        healthcheck:
+            test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/api/health/\")'"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+            start_period: 15s
         restart: unless-stopped
 
     frontend:
