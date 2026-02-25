@@ -102,27 +102,27 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Banco de dados:
-# Em DEBUG usa SQLite local; fora dele, espera Postgres por variaveis de ambiente.
+# Usa PostgreSQL quando DB_HOST esta definido (ex.: Docker); caso contrario, SQLite local.
 
-if DEBUG:
+if os.getenv('DB_HOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME', ''),
+            'USER': os.getenv('DB_USER', ''),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', 'db'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+            'CONN_MAX_AGE': 600,
+        }
+    }
+else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-else:
-    DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': os.getenv('DB_NAME', ''),
-                'USER': os.getenv('DB_USER', ''),
-                'PASSWORD': os.getenv('DB_PASSWORD', ''),
-                'HOST': os.getenv('DB_HOST', 'db'),
-                'PORT': os.getenv('DB_PORT', '5432'),
-                'CONN_MAX_AGE': 600,
-            }
-        }
 
 
 # Regras de tokens JWT (duracao e formato do header).

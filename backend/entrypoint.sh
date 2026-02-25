@@ -29,6 +29,7 @@ else:
 END
 
 echo "📁 Executando collectstatic..."
+mkdir -p /app/staticfiles
 python manage.py collectstatic --noinput
 
 echo "🚀 Iniciando aplicação..."
